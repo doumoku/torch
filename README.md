@@ -10,6 +10,7 @@ Additionally, in D&D5e only:
 ## Changelog
 
 This has needed to be pieced together a bit, but here's what I've gleaned from the GIT history.
+* 1.4.5 - December 4, 2022 - Adjusted branching and module.json to put version for up through FoundryVTT 9 on its own branch, so the v10 code can move to main. _We anticipate no further development on this branch._
 * 1.4.4 - March 19, 2022 - Dancing Lights now work better for players - sends entire create / remove cycle to GM when users lack permissions on tokens.
 * 1.4.3 - December 17, 2021 - Bumped official compatibility to Foundry 9, after testing with final test version. No code change.
 * 1.4.2 - October 31, 2021 - (Lupestro)
