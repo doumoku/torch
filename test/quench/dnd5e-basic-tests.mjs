@@ -1,7 +1,7 @@
-import { torchButtonToggles, torchButtonAbsent, cleanup } from './test-cases.js';
+import { torchButtonToggles, torchButtonAbsent, cleanup } from './test-cases.mjs';
 
 export let torchDnD5eBasicTests = (context) => {
-    const {describe, it, assert, before, afterEach} = context;
+    const {describe, it, assert, /*before, */afterEach} = context;
     const ACTOR = "Empty";
     describe('Torch DnD5e Basic Tests', () => {
         describe('Player without torches or spells', () => {

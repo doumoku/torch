@@ -12,16 +12,16 @@
 	"torch.gmInventoryItemName.hint": "Name des zu verwendenden Inventargegenstandes, wenn \"GM verwendet Inventar\" eingestellt ist.",
 	"torch.turnOffAllLights": "Erzwingen Sie Hell- und Dimmwerte für die konfigurierten Werte \"Aus\".",
 	"torch.holdCtrlOnClick": "Halte <span class=\"key\">Ctrl</span> beim Klick",
-	"torch.dancingLightVision.name": "Geben Sie \"Dancing Lights\" sicht.",
+	"torch.dancingLightVision.name": "Sicht für \"Dancing Lights\".",
 	"torch.dancingLightVision.hint": "Wenn diese Option gesetzt ist, hat jedes \"Dancing Light\" sicht und kann dazu verwendet werden, Bereiche der Karte aufzudecken, die Spieler nicht sehen können.",
     "torch.playerUsesInventory.name": "Spieler verwendet Inventar",
     "torch.playerUsesInventory.hint": "Wenn diese Option gesetzt ist, verwendet der Spieler beim Umschalten einer Fackel sein Inventar.",
     "torch.gameLightSources.name": "Zusätzliche Lichtquellen",
     "torch.gameLightSources.hint": "JSON Datei mit zusätzlichen Lichtquellen, die über die mitgelieferten hinaus verwendet werden sollen",
-    "torch.brightRadius.name": "Radius des hellen Licht",
-    "torch.dimRadius.name": "Radius des gedämpften Licht",
-	"torch.help.supplyExhausted.title": "Supply Exhausted",
-	"torch.help.supplyExhausted.body": "<p>Your light source is consumable and your quantity has dropped to zero. Increase the quantity of the item to light a fresh one.</p>",
-	"torch.help.setupSources.title": "Setting Up Light Sources",
-	"torch.help.setupSources.body": "<p>Your character currently has no light sources in their inventory, either as items or as spells.</p><p>For recognized systems, the light sources offered are based on inventory items - by name. Placing known light sources in your inventory will make them available to you. </p><p>Some light sources are consumable, like candles and torches. For these, using a light source decreases its quantity by one.</p><p>For systems that have no inventory-based light sources configured, you can configure light sources through module settings. In this case, all actors get the same light source.</p><p>You can make a system recognized by supplying a JSON file of light sources, as described in the README.md.</p><p>If you have multiple light sources in your inventory, you can choose among them by right-clicking the Torch button on the HUD when you do not have a light source lit.</p>"
+    "torch.brightRadius.name": "Radius des hellen Lichts",
+    "torch.dimRadius.name": "Radius des gedämpften Lichts",
+	"torch.help.supplyExhausted.title": "Vorrat erschöpft",
+	"torch.help.supplyExhausted.body": "<p>Die Lichtquelle ist ein Verbrauchsgegenstand und es sind keine Gegenstände mehr übrig. Erhöhe die Anzahl der Gegenstände, um eine neue zu entzünden.</p>",
+	"torch.help.setupSources.title": "Konfiguration von Lichtquellen",
+	"torch.help.setupSources.body": "<p>Im Inventar deines Charakters befinden sich derzeit keine Lichtquellen, weder als Gegenstand noch als Zauberspruch.</p><p>Für unterstützte Systeme werden die Lichtquellen aus dem Inventar angeboten, sortiert nach Name. Werden bekannte Lichtquellen im Inventar platziert, macht sie das nutzbar.</p><p>Manche Lichtquellen sind Verbrauchsgegenstände, z.B. Kerzen und Fackeln. Werden diese genutzt, dann wird ihre Anzahl um eins reduziert.</p><p>Für Systeme die keine inventarbasierten Lichtquellen unterstützen, können Lichtquellen in den Moduleinstellungen konfiguriert werden. In diesem Fall bekommen alle Akteure die gleiche Lichtquelle.</p><p>Damit ein neues System unterstützt wird, kann man eine JSON Datei mit den Lichtquellen einreichen, beschrieben in der README.md.</p><p>Gibt es mehrere Lichtquellen im Inventar, kann zwischen ihnen gewechselt werden, indem man auf den Fackelknopf in der HUD rechts klickt, solange keine Lichtquelle entzündet ist.</p>"
 }

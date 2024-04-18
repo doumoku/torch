@@ -1,7 +1,7 @@
-import { torchGenericBasicTests } from './generic-basic-tests.js';
-import { torchDnD5eBasicTests } from './dnd5e-basic-tests.js';
-import { torchCommonLibraryTests } from './common-library-tests.js';
-import { torchCommonTokenTests } from './common-token-tests.js';
+//import { torchGenericBasicTests } from './generic-basic-tests.js';
+//import { torchDnD5eBasicTests } from './dnd5e-basic-tests.js';
+import { torchCommonLibraryTests } from './common-library-tests.mjs';
+import { torchCommonTokenTests } from './common-token-tests.mjs';
 export function hookTests() {
     if (game.world.data.name.startsWith("torch-test-")) { // Belt and braces check
         console.log("Torch | Registering tests...");

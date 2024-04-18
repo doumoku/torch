@@ -12,10 +12,7 @@ export default class TokenHUD {
   /*
    * Add a button to instruct users how to use the module
    */
-  static async addQueryButton(
-    token,
-    hudHtml
-  ) {
+  static async addQueryButton(token, hudHtml) {
     let tbutton = $(QUERY_BUTTON_HTML);
     hudHtml.find(".col.left").prepend(tbutton);
     tbutton.find("i").click(async (event) => {
@@ -26,12 +23,12 @@ export default class TokenHUD {
         content: game.i18n.localize("torch.help.setupSources.body"),
         buttons: {
           close: {
-          icon: '<i class="fas fa-check"></i>',
-          label: "Close"
-          }
+            icon: '<i class="fas fa-check"></i>',
+            label: game.i18n.localize("Close"),
+          },
         },
-        default: "close"
-        }).render(true);
+        default: "close",
+      }).render(true);
     });
   }
   /*
@@ -43,7 +40,7 @@ export default class TokenHUD {
     forceLightSourceOff,
     toggleLightSource,
     togglelightHeld,
-    changeLightSource
+    changeLightSource,
   ) {
     let state = token.lightSourceState;
     let disabled = token.lightSourceIsExhausted(token.currentLightSource);
@@ -76,13 +73,13 @@ export default class TokenHUD {
             title: game.i18n.localize("torch.help.supplyExhausted.title"),
             content: game.i18n.localize("torch.help.supplyExhausted.body"),
             buttons: {
-             close: {
-              icon: '<i class="fas fa-check"></i>',
-              label: "Close"
-             }
+              close: {
+                icon: '<i class="fas fa-check"></i>',
+                label: "Close",
+              },
             },
-            default: "close"
-           }).render(true);
+            default: "close",
+          }).render(true);
         } else {
           if (event.shiftKey) {
             togglelightHeld(token);
@@ -92,7 +89,7 @@ export default class TokenHUD {
           } else {
             await toggleLightSource(token);
             TokenHUD.syncFlameButtonState(tbutton, token);
-          }  
+          }
         }
       }
     });

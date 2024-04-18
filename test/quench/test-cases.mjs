@@ -1,5 +1,5 @@
 
-import { waitUntil } from './test-utils.js';
+import { waitUntil } from './test-utils.mjs';
 
 let getLightRadii = (data) => {
     return data.light 

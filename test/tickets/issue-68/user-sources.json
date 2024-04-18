@@ -1,0 +1,89 @@
+{
+    "dragonbane": {
+        "system": "dragonbane",
+        "topology": "standard",
+        "quantity": "quantity",
+        "sources": {
+          "Lantern": {
+            "name": "Lantern",
+            "type": "equipment",
+            "consumable": false,
+            "light": [
+              {
+                "bright": 10,
+                "dim": 10,
+                "angle": 360,
+                "alpha": 0.1,
+                "color":"#f9f06b",
+                "animation": {
+                  "type": "torch",
+                  "speed": 5,
+                  "intensity": 5,
+                  "reverse": false
+                }
+              }
+            ]
+          },
+          "Oil Lamp": {
+            "name": "Oil Lamp",
+            "type": "equipment",
+            "consumable": false,
+            "light": [
+              {
+                "bright": 10,
+                "dim": 10,
+                "angle": 360,
+                "alpha": 0.1,
+                "color":"#f9f06b",
+                "animation": {
+                  "type": "torch",
+                  "speed": 5,
+                  "intensity": 5,
+                  "reverse": false
+                }
+              }
+            ]
+          },
+          "Torch": {
+            "name": "Torch",
+            "type": "equipment",
+            "consumable": false,
+            "light": [
+              {
+                "bright": 10,
+                "dim": 10,
+                "angle": 360,
+                "alpha": 0.1,
+                "color":"#f9f06b",
+                "animation": {
+                  "type": "torch",
+                  "speed": 5,
+                  "intensity": 5,
+                  "reverse": false
+                }
+              }
+            ]
+          },
+          "Tallow Candle": {
+            "name": "Tallow Candle",
+            "type": "equipment",
+            "consumable": false,
+            "light": [
+              {
+                "bright": 4,
+                "dim": 4,
+                "angle": 360,
+                "alpha": 0.1,
+                "color":"#f9f06b",
+                "animation": {
+                  "type": "torch",
+                  "speed": 5,
+                  "intensity": 3,
+                  "reverse": false
+                }
+              }
+            ]
+          }
+        }
+    }    
+}

@@ -1,4 +1,4 @@
-import SourceLibrary from '../library.js';
+import SourceLibrary from '../../src/library.mjs';
 export let torchCommonLibraryTests = (context) => {
   const {describe, it, assert, afterEach} = context;
   describe('Torch Common Library Tests', () => {

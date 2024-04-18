@@ -1,4 +1,4 @@
-// Note: requests.js operates statically purely at the Foundry level, so scene and 
+// Note: requests.js operates statically purely at the Foundry level, so scene and
 // token are Foundry objects. Token is *not* Torch's light source token object.
 
 const NEEDED_PERMISSIONS = {
@@ -9,11 +9,11 @@ const NEEDED_PERMISSIONS = {
 };
 
 export default class TorchRequest {
-	static ACTIONS = {
-		"create:dnd5e:Dancing Lights": TorchRequest.createDancingLights,
-		"delete:dnd5e:Dancing Lights": TorchRequest.removeDancingLights,
-	};
-	static isPermitted(user, requestType) {
+  static ACTIONS = {
+    "create:dnd5e:Dancing Lights": TorchRequest.createDancingLights,
+    "delete:dnd5e:Dancing Lights": TorchRequest.removeDancingLights,
+  };
+  static isPermitted(user, requestType) {
     if (requestType in NEEDED_PERMISSIONS) {
       return NEEDED_PERMISSIONS[requestType].every((permission) => {
         return user.can(permission);
@@ -55,13 +55,13 @@ export default class TorchRequest {
       sight: {
         bright: 0,
         dim: 0,
-        angle: 360
+        angle: 360,
       },
       texture: {
         src: "icons/magic/light/explosion-star-glow-orange.webp",
         scaleX: 0.25,
         scaleY: 0.25,
-        rotation: 0
+        rotation: 0,
       },
       mirrorX: false,
       vision: v,
@@ -82,7 +82,7 @@ export default class TorchRequest {
     });
   }
 
-  static async removeDancingLights(scene, reqToken, lightSettings) {
+  static async removeDancingLights(scene, reqToken /*, lightSettings*/) {
     let dltoks = [];
     scene.tokens.forEach((token) => {
       // If the token is a dancing light owned by this actor

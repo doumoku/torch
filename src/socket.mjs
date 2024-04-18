@@ -1,4 +1,4 @@
-import TorchRequest from "./request.js";
+import TorchRequest from "./request.mjs";
 
 export default class TorchSocket {
   /*
@@ -9,20 +9,24 @@ export default class TorchSocket {
       let scene = game.scenes.get(req.sceneId);
       let token = scene.tokens.get(req.tokenId);
       if (TorchRequest.supports(req.requestType)) {
-        await TorchRequest.perform(req.requestType, scene, token, req.lightSettings);
+        await TorchRequest.perform(
+          req.requestType,
+          scene,
+          token,
+          req.lightSettings,
+        );
       } else {
         console.warning(
-          `Torch | --- Attempted unregistered socket action ${req.requestType}`
+          `Torch | --- Attempted unregistered socket action ${req.requestType}`,
         );
       }
     }
   }
 
-  /* 
+  /*
    * See if this light source supports a socket request for this action
    */
   static requestSupported(action, lightSource) {
-    
     return TorchRequest.supports(`${action}:${game.system.id}:${lightSource}`);
   }
 
@@ -35,7 +39,7 @@ export default class TorchSocket {
       requestType: `${action}:${game.system.id}:${lightSource}`,
       sceneId: canvas.scene.id,
       tokenId: tokenId,
-      lightSettings: lightSettings
+      lightSettings: lightSettings,
     };
 
     if (TorchRequest.supports(req.requestType)) {
@@ -44,9 +48,7 @@ export default class TorchSocket {
         return true;
       } else {
         let recipient = game.users.contents.find((user) => {
-          return (
-            user.active && TorchRequest.isPermitted(user, req.requestType)
-          );
+          return user.active && TorchRequest.isPermitted(user, req.requestType);
         });
         if (recipient) {
           req.addressTo = recipient.id;
@@ -59,7 +61,7 @@ export default class TorchSocket {
       }
     } else {
       console.warning(
-        `Torch | --- Requested unregistered socket action ${req.requestType}`
+        `Torch | --- Requested unregistered socket action ${req.requestType}`,
       );
     }
   }

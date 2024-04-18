@@ -1,0 +1,81 @@
+name: CI Build
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # Set up our some variables for future use
+    # Adapted from https://github.community/t/how-to-get-just-the-tag-name/16241/7
+    # Tag name: ${{ steps.get_vars.outputs.TAG_NAME }}
+    # Zip name: ${{ steps.get_vars.outputs.ZIP_NAME }}
+    # Expected Release Download URL: ${{ steps.get_vars.outputs.RELEASE_DOWNLOAD_URL }}
+    # Expected Release module.json URL: ${{ steps.get_vars.outputs.RELEASE_INSTALL_URL }}
+    # Stringified module.json contents: ${{ steps.get_vars.outputs.SYSTEM_JSON }}
+    - name: Collect the module JSON
+      id: get_vars
+      run: |
+        JSON=$(cat ./module.json)
+        echo ::set-output name=MODULE_JSON::${JSON//'%'/'%25'}
+
+    - name: Name the zip
+      id: name_zip
+      env:
+        # Extract version and download url from module.json
+        # https://docs.github.com/en/actions/learn-github-actions/expressions#fromjson
+        PACKAGE_VERSION: ${{fromJSON(steps.get_vars.outputs.MODULE_JSON).version}}
+        PACKAGE_DOWNLOAD: ${{fromJSON(steps.get_vars.outputs.MODULE_JSON).download}}
+      run: |
+        echo "ZIP_NAME=torch-v$PACKAGE_VERSION.zip" >> $GITHUB_OUTPUT
+        echo "PROJECTED_DOWNLOAD=https://github.com/${{github.repository}}/releases/download/v$PACKAGE_VERSION/torch-v$PACKAGE_VERSION.zip" >> $GITHUB_OUTPUT
+  
+    - name: Verify package download URL reflects package version
+      env:
+        ZIP_NAME: ${{ steps.name_zip.outputs.ZIP_NAME }}
+        PACKAGE_VERSION: ${{fromJSON(steps.get_vars.outputs.MODULE_JSON).version}}
+        PACKAGE_DOWNLOAD: ${{fromJSON(steps.get_vars.outputs.MODULE_JSON).download}}
+        PROJECTED_DOWNLOAD: ${{ steps.name_zip.outputs.PROJECTED_DOWNLOAD }}
+      run: |
+        echo "zip name: $ZIP_NAME"
+        echo "package version: $PACKAGE_VERSION"
+        echo "package download: $PACKAGE_DOWNLOAD"
+        echo "version download: $PROJECTED_DOWNLOAD"
+        if [[ ! $PROJECTED_DOWNLOAD == $PACKAGE_DOWNLOAD ]]; then
+          echo "The module.json download url is inconsistent with the module.json version."
+          echo "Please fix this and push the tag again."
+          exit 1
+        fi
+
+    # Set up Node
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    # Set up pnpm
+    - name: Install Dependencies
+      uses: pnpm/action-setup@v2
+      with: 
+        version: 8
+        run_install: true
+
+    # Run our `build` script
+    - name: Build All
+      run: |
+        pnpm install
+        pnpm test
+
+    # Create a zip file with all files required by the module to add to the release
+    - name: Zip It
+      run: |
+        cd dist
+        zip ${{steps.name_zip.outputs.ZIP_NAME}} -r torch.js torch.css lang module.json sources.json README.md 

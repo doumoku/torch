@@ -1,5 +1,5 @@
-import TorchToken from '../token.js';
-import SourceLibrary from '../library.js';
+import TorchToken from '../../src/token.mjs';
+import SourceLibrary from '../../src/library.mjs';
 
 let initiateWith = async function(name, item, count, assert) {
   let foundryToken = game.scenes.active.tokens.getName(name);

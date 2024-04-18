@@ -1,6 +1,6 @@
 let waitUntil = function (predicate, name = "", interval = 10, timeout = 1000 ) {
     let sleep = ms => new Promise(r => setTimeout(r, ms));
-    let waitFor = async function waitFor(f){
+    let waitFor = async function waitFor(/*f*/){
         let endTime = Date.now() + timeout;
         let result = predicate();
         let optname = ` ${name} `;

@@ -1,0 +1,18 @@
+{
+    "swade": {
+        "system": "swade",
+        "topology": "standard",
+        "quantity" : "quantity",
+        "sources": {
+            "Flashlight": {
+                "name": "Flashlight",
+                "type": "equipment",
+                "consumable": false,
+                "states": 2,
+                "light": [
+                {"bright": 10, "dim": 10, "angle": 53}
+                ]
+            }
+        }
+    }
+}

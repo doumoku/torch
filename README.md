@@ -13,12 +13,15 @@ Out of the box, the following are available:
 | dnd5e | Candle, Torch, Lamp, Bullseye Lantern, Hooded Lantern, Light, Dancing Lights
 | swade | Candle, Flashlight, Lantern, Torch
 | pf1 | Candle, Lamp, Lantern, Bullseye Lantern, Hooded Lantern, Miner's Lantern, Torch
-| pf2e | Candle, Lantern (Hooded), Lantern (Bull's Eye), Torch
+| pf2e | Candle, Lantern (Hooded), Lantern (Bull's Eye), Torch. Everburning Torch
 | sfrpg | "Comm Unit, Personal", "Portable Light, Beacon", "Portable Light, Flashlight", "Portable Light, Lantern", "Portable Light, Spotlight", 
 | earthdawn4e | Candle, Lantern (Hooded), Lantern (Bullseye), Torch
 | gurps | "Candle, Tallow", "Flashlight, Heavy", Mini Flashlight, Micro Flashlight, Survival Flashlight, Lantern, Torch, Bull's-Eye Lantern, "Electric Lantern, Small", "Electric Lantern, Large", Small Tactical Light, Large Tactical Light, Floodlight
-| dcc | Lantern, "Torch, each",
-| ose | Torch, Lantern
+| dcc | Lantern, "Torch, each"
+| ose | Torches, Lantern
+| reclaim-the-wild | Candle, Firewood, Lantern (1h, R0), Lantern (1h, R1),Lantern (1h, R2),Lantern (1h, R3), Lantern (1h, R4), Lantern (1h, R5), Torch (1h, R0), Torch (1h, R1), Torch (1h, R2), Torch (1h, R3), Torch (1h, R4), Torch (1h, R5)
+| dragonbane | Lantern, Oil Lamp, Torch, Tallow Candle
+| demonlord  | Candle, Lantern, Spotlight Lantern, Torch 
 
 This module just sheds light from the location of a player token upon demand based upon equipment inventory. It is recommended *not* to use this module for spells or equipment that have other capabilities you intend to use, like performing damage or setting down the equipment, but to rely upon other common approaches, like active effects or item piles, for those.
 
@@ -35,7 +38,7 @@ You can supersede these settings or supply settings for your own light sources f
     "aliases": {
       "Lantern (Bullseye)": "Bullseye Lantern",
       "Lantern (Hooded)": "Hooded Lantern"
-    }
+    },
     "sources": {
       "Candle": {
         "name": "Candle",
@@ -153,15 +156,16 @@ The following is the current status of translation. Some features have arrived, 
 
 | Language | Completion | Contributors |
 | -------- | ---------- | ------------ |
-| de    | `[##################----]` 18/22 (82%) | ToGreedy |
+| de    | `[######################]` 22/22 (100%) | ToGreedy, Beff42 |
 | en    | `[######################]` 22/22 (100%) | deuce, lupestro |
-| es    | `[############----------]` 12/22 (55%) | lozanoje |
+| es    | `[######################]` 12/22 (100%) | lozanoje, WallaceMcGregor |
 | fr    | `[##################----]` 18/22 (82%) | Aymeeric |
+| ja    | `[######################]` 22/22 (100%) | doumoku |
 | pt-br | `[############----------]` 12/22 (55%) | rinnocenti |
 | zh-cn | `[##########------------]` 10/22 (56%) | xticime |
 | zh-tw | `[############----------]` 12/22 (45%) | zeteticl |
 
-PRs for further translations will be dealt with promptly. While Japanese, and Korean are most especially desired - our translation story seems deeply incomplete without them - all others are welcome. 
+PRs for further translations will be dealt with promptly. While Korean is most especially desired (thank you, doumoku for Japanese, also on the short list) - all others are welcome. 
 
 Even now, it's only 22 strings, a satisfying afternoon, even for someone who's never committed to an open source project before, and your name will go into the readme right here next to the language. Fork, clone, update, _test locally_, commit, and then submit a PR. Holler for `@lupestro` on Discord if you need help getting started.
 

@@ -1,21 +1,22 @@
-import TorchSocket from "./socket.js";
-import Settings from "./settings.js";
+import TorchSocket from "./socket.mjs";
+import Settings from "./settings.mjs";
 
 let DEBUG = true;
 
+// eslint-disable-next-line no-unused-vars
 const debugLog = (...args) => {
   if (DEBUG) {
     console.log(...args);
   }
 };
 
-const getLightUpdates = function(lightSettings) {
-  let result = {}
+const getLightUpdates = function (lightSettings) {
+  let result = {};
   for (let setting in lightSettings) {
     result["light." + setting] = lightSettings[setting];
   }
   return result;
-}
+};
 export default class TorchToken {
   STATE_ON = "on";
   STATE_DIM = "dim";
@@ -42,9 +43,9 @@ export default class TorchToken {
   get currentLightSource() {
     // The one we saved
     let lightSource = this._token.getFlag("torch", "lightSource");
-    if (lightSource && this._ownedSources.find(
-        (item) => item.name === lightSource
-      )
+    if (
+      lightSource &&
+      this._ownedSources.find((item) => item.name === lightSource)
     ) {
       return lightSource;
     }
@@ -52,18 +53,18 @@ export default class TorchToken {
     let itemName = Settings.inventoryItemName;
     let namedSource = itemName
       ? this._ownedSources.find(
-          (item) => item.name.toLowerCase() === itemName.toLowerCase()
+          (item) => item.name.toLowerCase() === itemName.toLowerCase(),
         )
       : undefined;
-	  if (itemName &&!!namedSource) {
-		  return namedSource.name;
+    if (itemName && !!namedSource) {
+      return namedSource.name;
     }
     // The top one on the list
     if (this._ownedSources.length > 0) {
       return this._ownedSources[0].name;
     }
     // Nothing
-    return;
+    return undefined;
   }
 
   async setCurrentLightSource(value) {
@@ -91,8 +92,9 @@ export default class TorchToken {
 
   async forceStateOff() {
     // Need to deal with dancing lights
+    let priorState = this._token.getFlag("torch", "lightSourceState");
     await this._token.setFlag("torch", "lightSourceState", this.STATE_OFF);
-    await this._turnOffSource();
+    await this._turnOffSource(priorState === this.STATE_OFF || priorState === undefined);
   }
 
   async advanceState() {
@@ -103,8 +105,8 @@ export default class TorchToken {
         state === this.STATE_OFF
           ? this.STATE_ON
           : state === this.STATE_ON
-          ? this.STATE_DIM
-          : this.STATE_OFF;
+            ? this.STATE_DIM
+            : this.STATE_OFF;
     } else {
       state = state === this.STATE_OFF ? this.STATE_ON : this.STATE_OFF;
     }
@@ -127,16 +129,21 @@ export default class TorchToken {
 
   // Private internal methods
 
-  async _turnOffSource() {
+  async _turnOffSource(wasAlreadyOff) {
     let source = this._library.getLightSource(this.currentLightSource);
     if (TorchSocket.requestSupported("delete", this.currentLightSource)) {
       // separate token lighting
-      TorchSocket.sendRequest(this._token.id, "delete", this.currentLightSource, source.light);
+      TorchSocket.sendRequest(
+        this._token.id,
+        "delete",
+        this.currentLightSource,
+        source.light,
+      );
     } else {
       // self lighting - to turn off, use light settings from prototype token
       let protoToken = game.actors.get(this._token.actorId).prototypeToken;
       await this._token.update(getLightUpdates(protoToken.light));
-      if (source.consumable) {
+      if (!wasAlreadyOff & source.consumable) {
         await this._consumeSource(source);
       }
     }
@@ -146,7 +153,12 @@ export default class TorchToken {
     let source = this._library.getLightSource(this.currentLightSource);
     if (TorchSocket.requestSupported("create", this.currentLightSource)) {
       // separate token lighting
-      TorchSocket.sendRequest(this._token.id, "create", this.currentLightSource, source.light[0]);
+      TorchSocket.sendRequest(
+        this._token.id,
+        "create",
+        this.currentLightSource,
+        source.light[0],
+      );
     } else {
       // self lighting
       await this._token.update(getLightUpdates(source.light[0]));
@@ -161,8 +173,10 @@ export default class TorchToken {
   }
 
   async _consumeSource(source) {
-    if ((game.user.isGM && Settings.gmUsesInventory) || 
-       (!game.user.isGM && Settings.userUsesInventory)) {
+    if (
+      (game.user.isGM && Settings.gmUsesInventory) ||
+      (!game.user.isGM && Settings.userUsesInventory)
+    ) {
       let count = this._library.getInventory(this._token.actor, source.name);
       if (count) {
         await this._library.decrementInventory(this._token.actor, source.name);

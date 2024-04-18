@@ -1,0 +1,25 @@
+{
+    "dnd5e": {
+      "system": "dnd5e",
+      "topology": "standard",
+      "quantity" : "quantity",
+      "aliases": {
+        "Lantern (Bullseye)": "Bullseye Lantern",
+        "Lantern (Hooded)": "Hooded Lantern"
+      },
+      "sources": { 
+        "Torch": { 
+            "name": "Torch", 
+            "type": "equipment", 
+            "consumable": true, 
+            "states": 2, 
+            "light": [ 
+            {  
+                "bright": 10, "dim": 15, "angle": 360, "color": "#ea5d2e", "alpha": 0.5, 
+                "animation": { "type": "torch", "speed": 5, "intensity": 5, "reverse": false }  
+            } 
+          ]
+        }
+      }
+    }
+}

@@ -37,8 +37,8 @@ export default class Settings {
 
   static get dancingLightsVision() {
     return game.system.id === "dnd5e"
-     ? game.settings.get("torch", "dancingLightVision")
-     : false;
+      ? game.settings.get("torch", "dancingLightVision")
+      : false;
   }
 
   static get helpText() {
