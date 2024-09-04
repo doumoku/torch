@@ -1,0 +1,25 @@
+{
+  "PF2E": {
+    "system": "PF2E",
+    "topology": "standard",
+    "quantity" : "quantity",
+    "aliases": {
+      "obsidian-dagger-merk": "Obsidian dagger-merk",
+      "Holdover (Hooded)": "Hooded Lantern"
+    },
+    "sources": {
+      "Obsidian dagger (merk)": {
+        "name": "Obsidian dagger (merk)",
+        "type": "equipment",
+        "consumable": false,
+        "states": 2,
+        "light": [
+          { 
+            "bright": 10, "dim": 20, "angle": 360, "color": "#0000a0", "alpha": 0.5,
+            "animation": { "type": "torch", "speed": 2, "intensity": 1, "reverse": false } 
+          }
+        ]
+      }
+    }
+  },
+}

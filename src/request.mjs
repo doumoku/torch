@@ -77,7 +77,6 @@ export default class TorchRequest {
       Object.assign({ x: c.x, y: c.y }, dancingLight),
     ];
     await scene.createEmbeddedDocuments("Token", tokens, {
-      temporary: false,
       renderSheet: false,
     });
   }

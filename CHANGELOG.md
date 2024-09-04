@@ -2,6 +2,31 @@
 
 ## Middle Kingdom - v10 -> main branch
 
+### 2.15.1 - September 2, 2024 - Better error message for missing user sources file
+- [BUGFIX] The error message for a missing user sources file was cryptic - now just tells you
+- [BUGFIX] The fallbacks for lights as object to array and for missing states property weren't working
+
+### 2.15.0 - September 2, 2024 - Worlds Without Number support and OSE cleanups
+- [FEATURE] Now supports Worlds Without Number (thanks, @fuzzymuzzi)
+- [FEATURE] Now supports Everyday Heroes
+- [BUGFIX] Adjustment to sources list for OSE light sources (thanks, @Andrew-Staggs)
+
+### 2.14.0 - August 10, 2024 - Italian translation added
+- [FEATURE] Italian translation provided (Thanks, @GregoryWarn)
+
+### 2.13.1 - May 25, 2024 - Brazilian Portuguese updated
+- [FEATURE] Completed Brazilian Portuguese translation
+
+### 2.13.0 - May 12, 2024 - User light sources UX improvements
+- [FEATURE] Using JSON5 for looser rules - comments, trailing commas, whitespace, continuation
+- [FEATURE] Validating light source JSON against schema
+- [FEATURE] Feedback you can act upon when light source JSON is invalid 
+- [FEATURE] Added support for light sources in YAML format
+
+### 2.12.0 - April 20, 2024
+- [FEATURE] Verified on V12 developer release but still works fine in V11.
+- [BUGFIX] Cleaned up V12 deprecation on Dancing Lights implementation.
+
 ### 2.11.1 - February 3, 2024
 - [BUGFIX] (StormDarkwood) Fixed Dragonbane lighting *back* to what it should be. (It's in meters, not grids.)
 - [BUGFIX] (spikedshrike) Flashlight angle on SWADE was bugged - 3 degrees shipped should be 6 degrees (for 10:1 beam) or possible 53 degrees (for cone) - seeking clarification.

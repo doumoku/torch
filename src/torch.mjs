@@ -102,6 +102,16 @@ Hooks.on("ready", () => {
   });
 });
 
+Hooks.on("preUpdateSetting", (doc, changes) => {
+  if (doc.key === "torch.gameLightSources") {
+    let cleanedValue = changes.value;
+    if (changes.value.substring(0,1) === '"') {
+      cleanedValue = changes.value.substring(1, changes.value.length - 1);
+    }
+    SourceLibrary.validateSourceJSON(cleanedValue, true);
+  }
+});
+
 Hooks.once("init", () => {
   // Only load and initialize test suite if we're in a test environment
   if (game.world.id.startsWith("torch-test-")) {

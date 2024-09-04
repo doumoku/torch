@@ -1,0 +1,133 @@
+{
+    "dnd5e":   {
+        "system": "dnd5e",
+        "topology": "standard",
+        "quantity": "quantity",
+        "aliases": {
+          "Фонарь / Lantern, (Обычный / Hooded)": "Фонарь обычный / Hooded Lantern",
+          "Фонарь / Lantern, (Потайной / Bullseye)": "Фонарь потайной / Bullseye Lantern"
+        },
+        "sources": {
+            "Свеча / Candle": {
+                "name": "Свеча / Candle",
+                "type": "equipment",
+                "consumable": true,
+                "states": 2,
+                "light": [
+                    { 
+                    "bright": 5, "dim": 10, "angle": 360, "color": "#91925d", "alpha": 0.5,
+                    "animation": { "type": "Свеча / Candle", "speed": 5, "intensity": 5, "reverse": false } 
+                    }
+                ]
+            },
+            "Факел / Torch": {
+                "name": "Факел / Torch",
+                "type": "equipment",
+                "consumable": true,
+                "states": 2,
+                "light": [
+                    {
+                    "bright": 20, "dim": 40, "angle": 360, "color": "#a2642a", "alpha": 0.5,
+                    "animation": { "type": "Факел / Torch", "speed": 5, "intensity": 5, "reverse": false }
+                    }
+                ]
+            },
+            "Призрачный Факел / Ghost Torch": {
+                "name": "Призрачный Факел / Ghost Torch",
+                "type": "equipment",
+                "consumable": true,
+                "states": 2,
+                "light": [
+                    {  
+                    "bright": 20, "dim": 40, "angle": 360, "color": "#91a4b6", "alpha": 0.5,
+                    "animation": { "type": "Призрачный Факел / Ghost Torch", "speed": 5, "intensity": 5, "reverse": false }
+                    }
+                ]
+            },
+            "Создание пламени / Produce Flame": {
+                "name": "Создание пламени / Produce Flame",
+                "type": "cantrip",
+                "consumable": false,
+                "states": 2,
+                "light": [
+                    {                    
+                        "bright": 10, "dim": 20, "angle": 360, "color": "#c27a29", "alpha": 0.5,
+                        "animation": { "type": "Создание пламени / Produce Flame", "speed": 5, "intensity": 5, "reverse": false }
+                    } 
+                ]
+            },
+            "Лампа / Lamp": {
+                "name": "Лампа / Lamp",
+                "type": "equipment",
+                "consumable": false,
+                "states": 2,
+                "light": [
+                    {
+                        "bright": 15, "dim": 45, "angle": 360, "color": "#bea23c", "alpha": 0.5,
+                        "animation": { "type": "Лампа / Lamp", "speed": 5, "intensity": 5, "reverse": false }
+                    }
+                ]
+            },
+            "Фонарь потайной / Bullseye Lantern": {
+                "name": "Фонарь потайной / Bullseye Lantern",
+                "type": "equipment",
+                "consumable": false,
+                "states": 2,
+                "light": [
+                    {
+                    "bright": 15, "dim": 45, "angle": 360, "color": "#776113", "alpha": 0.5,
+                    "animation": { "type": "Фонарь потайной / Bullseye Lantern", "speed": 5, "intensity": 5, "reverse": false }
+                    }
+                ]
+            },
+            "Фонарь обычный / Hooded Lantern": {
+                "name": "Фонарь обычный / Hooded Lantern",
+                "type": "equipment",
+                "consumable": false,
+                "states": 2,
+                "light": [
+                    {
+                    "bright": 15, "dim": 45, "angle": 360, "color": "#b2921f", "alpha": 0.5,
+                    "animation": { "type": "Фонарь обычный / Hooded Lantern", "speed": 5, "intensity": 5, "reverse": false }
+                    }
+                ]
+            },
+            "Призрачный фонарь / Ghost Lantern": {
+                "name": "Призрачный фонарь / Ghost Lantern",
+                "type": "equipment",
+                "consumable": false,
+                "states": 2,
+                "light": [
+                    {
+                    "bright": 15, "dim": 45, "angle": 360, "color": "#abcae8", "alpha": 0.5,
+                    "animation": { "type": "Призрачный фонарь / Ghost Lantern", "speed": 5, "intensity": 5, "reverse": false }
+                    }
+                ]
+            },
+            "Фонарь отслеживания / Lantern of Tracking": {
+                "name": "Фонарь отслеживания / Lantern of Tracking",
+                "type": "equipment",
+                "consumable": false,
+                "states": 2,
+                "light": [
+                    {
+                    "bright": 15, "dim": 45, "angle": 360, "color": "#6db05e", "alpha": 0.5,
+                    "animation": { "type": "Фонарь отслеживания / Lantern of Tracking", "speed": 5, "intensity": 5, "reverse": false }
+                    }
+                ]
+            },
+            "Фонарь разоблачения / Lantern of Revealing": {
+                "name": "Фонарь разоблачения / Lantern of Revealing",
+                "type": "equipment",
+                "consumable": false,
+                "states": 2,
+                "light": [
+                    {
+                    "bright": 15, "dim": 45, "angle": 360, "color": "#90ddfe", "alpha": 0.5,
+                    "animation": { "type": "Фонарь разоблачения / Lantern of Revealing", "speed": 5, "intensity": 5, "reverse": false }
+                    }
+                ]
+            } 
+        }
+    }
+}

@@ -22,6 +22,19 @@ module.exports = {
   },
   overrides: [
     {
+      files: [".eslintrc.js", "src/sources.mjs"],
+      rules: {
+        "prettier/prettier": [
+          "error",
+          {
+            "singleQuote": false,
+            "printWidth": 120,
+            "quoteProps": "preserve",
+          },
+        ],
+      },
+    },
+    {
       files: ["test/*.mjs"],
       globals: {
         it: "readable",

@@ -1,6 +1,6 @@
 {
   "name": "torch",
-  "version": "2.11.1",
+  "version": "2.15.1",
   "description": "Torch HUD Controls",
   "main": "src/torch.js",
 
@@ -33,6 +33,11 @@
     }
   ],
   "license": "SEE LICENSE IN README.md",
+  "dependencies": {
+    "ajv":"^8.13.0",
+    "json5":"^2.2.3",
+    "js-yaml": "^4.1.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.23.9",
     "@babel/preset-env": "^7.23.9",

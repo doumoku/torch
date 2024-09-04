@@ -1,5 +1,11 @@
+//import jsonlint from "jsonlint";
+import JSON5 from "json5";
+import YAML from "js-yaml";
+import Ajv from "ajv";
 import getTopology from "./topology.mjs";
 import commonSources from "./sources.mjs";
+import schema from "./schema.mjs";
+
 /* Library of light sources to use for this system */
 
 export default class SourceLibrary {
@@ -8,6 +14,90 @@ export default class SourceLibrary {
   constructor(library) {
     // Only invoke through static factory method load()
     this.library = library;
+  }
+
+  static alertOnConfigDataErrors(errors) {
+    const errorshtml = errors
+      .map((err) => `<span>${err.replaceAll("\n", "<br/>")}</span>`)
+      .join("<br/>");
+    let warning = new Dialog({
+      title: "Loading User Sources Failed",
+      content: `<pre style="overflow-x:scroll;text-wrap:wrap"><code>${errorshtml}</code></pre>`,
+      buttons: {
+        close: {
+          label: "Close",
+        },
+      },
+    });
+    warning.render(true);
+  }
+
+  static async validateSourceJSON(userLibrary, alert) {
+    let userData;
+    let errors;
+    let result = true;
+    const yamlFileCheck = (library) => {
+      return [".yaml", ".yml"].includes(
+        library.substring(library.lastIndexOf(".")),
+      );
+    };
+    const configIsText =
+      userLibrary.indexOf("{") === 0 || userLibrary.indexOf("---") === 0;
+    const configIsYaml = configIsText
+      ? userLibrary.indexOf("---") === 0
+      : yamlFileCheck(userLibrary);
+    const sourceName = configIsText ? "inline text" : `"${userLibrary}"`;
+
+    let configText = configIsText
+      ? userLibrary // To avoid having to build a server running test cases
+      : await fetch(userLibrary)
+          .then((response) => {
+            if (response.status !== 200) {
+              errors = [`User library ${userLibrary} not found`];
+              result = false;
+              return;
+            }
+            return response.text();
+          })
+          .catch((reason) => {
+            errors = ["Error loading user library: ", reason];
+            result = false;
+            return;
+          });
+    // From here on, code is common
+    if (result) {
+      try {
+        if (configIsYaml) {
+          userData = YAML.load(configText);
+        } else {
+          userData = JSON5.parse(configText);
+        }
+      } catch (e) {
+        result = false;
+        errors = [e.message];
+      }
+    }
+    if (result) {
+      const ajv = new Ajv();
+      if (!ajv.validate(schema, userData)) {
+        result = false;
+        errors = ajv.errors.map((error) => {
+          return `${error.keyword} at path "${error.instancePath}" ${error.message}`;
+        });
+      }
+    }
+    if (errors) {
+      console.warn(
+        `Loading user light sources from ${sourceName} failed`,
+        errors,
+      );
+      if (alert) {
+        SourceLibrary.alertOnConfigDataErrors(errors);
+      }
+    } else if (!configIsText) {
+      console.log(`User light sources from ${sourceName} loaded`);
+    }
+    return [errors, userData];
   }
 
   static applyFieldDefaults(library, reference) {
@@ -46,15 +136,17 @@ export default class SourceLibrary {
         if (sources[source].consumable === "false") {
           sources[source].consumable = false;
         }
+        // Normalize lights to be an array, not a single object
         if (
           sources[source].light &&
-          sources[source].light.constructor !== Array
+          sources[source].light.constructor.name !== "Array"
         ) {
           sources[source].light = [sources[source].light];
         }
+        // If states isn't specified, derive it by counting the lights and adding one for "off" state.
         if (
           sources[source].light &&
-          sources[source].light.constructor === Array &&
+          sources[source].light.constructor.name === "Array" &&
           !sources[source].states
         ) {
           sources[source].states = sources[source].light.length + 1;
@@ -109,26 +201,27 @@ export default class SourceLibrary {
     let userData;
     if (userLibrary) {
       if (typeof userLibrary === "string") {
-        userData = await fetch(userLibrary)
-        .then((response) => {
-          return response.json();
-        })
-        .catch((reason) => {
-          console.warn("Failed loading user library: ", reason);
-          return;
-        });
+        [, userData] = await SourceLibrary.validateSourceJSON(
+          userLibrary,
+          true,
+        );
       } else {
         userData = userLibrary;
       }
       if (userData) { // User library supplied as object
         this.applyFieldDefaults(userData, SourceLibrary.commonLibrary);
       }
-    } else { // No user library supplied
+    } else {
+      // No user library supplied
       userData = {};
     }
     // The user library reloads every time you open the HUD to permit cut and try.
-    let mergedLibrary = mergeLibraries(userData, SourceLibrary.commonLibrary, configuredLight);
-    
+    let mergedLibrary = mergeLibraries(
+      userData,
+      SourceLibrary.commonLibrary,
+      configuredLight,
+    );
+
     // All local changes here take place against the merged data, which is a copy,
     // not against the common or user libraries.
     if (mergedLibrary[systemId]) {
