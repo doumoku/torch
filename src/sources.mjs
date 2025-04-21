@@ -891,11 +891,25 @@ export default {
     "topology": "standard",
     "quantity": "quantity",
     "aliases": {
+      "6-watt fluorescent lamp": "Lamp",
       "Antorcha": "Torch",
       "Antorcha encendida": "Torch",
+      "Bengala": "Flare",
+      "Bengala (de un solo uso)": "Flare",
+      "Caja de cerillas estanca": "Candle",
+      "Camp Stove": "Torch",
       "Candelabro": "Candle",
       "Candil": "Lamp",
+      "Carbide Lamp": "Lamp",
+      "Cocina de acampada": "Torch",
       "Cocina de camping de propano": "Candle",
+      "Cooking Kit": "Torch",
+      "Dark Lantern": "Lantern",
+      "Electric Torch": "Lantern",		
+      "Fifteen Hour Candles": "Candle",
+      "Flare (Disposable)": "Flare",
+      "Gasoline Lantern": "Lantern",
+      "Kerosene Lantern": "Lantern",
       "Lámpara": "Lamp",
       "Lámpara de carburo": "Lamp",
       "Lámpara fluorescente de 6 W": "Lamp",
@@ -905,11 +919,14 @@ export default {
       "Linterna eléctrica": "Lantern",
       "Linterna pequeña": "Lantern",
       "Linterna sellada": "Lantern",
-      "Bengala": "Flare",
-      "Bengala (de un solo uso)": "Flare",
+      "Pen Light": "Lantern",		
       "Pistola de bengalas": "Flare",
+      "Searchlight": "Lantern",
+      "Utensilios de cocina": "Torch",
       "Vela": "Candle",
+      "Velas": "Candle",
       "Velas de 15 horas": "Candle",
+      "Waterproof Match Case": "Candle",
     },
     "sources": {
       "Torch": {
@@ -943,7 +960,7 @@ export default {
         "light": [
           {
             "bright": 4,
-            "dim": 10,
+            "dim": 8,
             "angle": 57,
           },
         ],
@@ -955,7 +972,7 @@ export default {
         "light": [
           {
             "bright": 1,
-            "dim": 3,
+            "dim": 2,
             "angle": 360,
           },
         ],
@@ -967,7 +984,7 @@ export default {
         "light": [
           {
             "bright": 10,
-            "dim": 15,
+            "dim": 20,
             "angle": 360,
             "color": "#ff9329",
             "alpha": 0.5,
@@ -988,13 +1005,14 @@ export default {
     "quantity": "quantity",
     "aliases": {
       "Antorcha": "Torch",
+      "Bengala": "Flare",
       "Candelabro": "Candle",
       "Candil": "Lamp",
       "Lámpara": "Lamp",
       "Linterna": "Lantern",
-      "Bengala": "Flare",
       "Pistola de bengalas": "Flare",
       "Vela": "Candle",
+      "Velas": "Candle",
     },
     "sources": {
       "Torch": {
@@ -1028,7 +1046,7 @@ export default {
         "light": [
           {
             "bright": 4,
-            "dim": 10,
+            "dim": 8,
             "angle": 57,
           },
         ],
@@ -1040,7 +1058,7 @@ export default {
         "light": [
           {
             "bright": 1,
-            "dim": 3,
+            "dim": 2,
             "angle": 360,
           },
         ],
@@ -1052,7 +1070,7 @@ export default {
         "light": [
           {
             "bright": 10,
-            "dim": 15,
+            "dim": 20,
             "angle": 360,
             "color": "#ff9329",
             "alpha": 0.5,
@@ -1115,7 +1133,7 @@ export default {
         "light": [
           {
             "bright": 4,
-            "dim": 10,
+            "dim": 8,
             "angle": 57,
           },
         ],
@@ -1127,7 +1145,7 @@ export default {
         "light": [
           {
             "bright": 1,
-            "dim": 3,
+            "dim": 2,
             "angle": 360,
           },
         ],
