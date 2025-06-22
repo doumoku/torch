@@ -2,6 +2,9 @@
 
 ## Middle Kingdom - v10 -> main branch
 
+### 3.0.1 - June 22, 2025 - Restored help button for actor having no light sources
+- [BUGFIX] The move of the HUD to App v2 required changes to the code that shows a [?] button instead of the torch button and provides guidance when the user has no light sources. This guidance is now restored. Thanks to Mika for the heads up and for patience with my slow response in addressing the problem.
+
 ### 3.0.0 - June 15, 2025 - Foundry 13 fixes - No longer supports v12
 - [BREAKING] Now supports v13 and up only - supporting HUD on v12 with appV1 and v13 with appV2 at the same time got really messy
 - [FEATURE] Light source list is now a real palette of names with icons.

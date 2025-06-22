@@ -44,7 +44,7 @@ class Torch {
     if (hud.object.document.name in lightSources) return;
     if (!game.user.isGM && !Settings.playerTorches) return;
     if (!token.currentLightSource) {
-      TokenHUD.addQueryButton(token, hudHtml);
+      TokenHUD.addQueryButton(hud, token, hudHtml);
       return;
     }
     /* Manage torch state */

@@ -1,4 +1,4 @@
-const QUERY_BUTTON_HTML = `<div class="control-icon torch"><i class="fas fa-question"></i></div>`;
+const QUERY_BUTTON_HTML = `<button class="control-icon torch" data-action="toggleTorchHelp"><i class="fas fa-question"></i></button>`;
 const DISABLED_ICON_HTML = `<i class="fas fa-slash fa-stack-1x"></i>`;
 const TORCH_BUTTON_HTML = (tooltip, active, disabled) => {
   if (disabled) {
@@ -6,12 +6,12 @@ const TORCH_BUTTON_HTML = (tooltip, active, disabled) => {
     <button type="button" class="control-icon torch fa-stack" data-action="toggleTorch" data-tooltip="${tooltip}">
       <i class="fas fa-slash fa-stack-1x"></i>
       <i class="fas fa-fire fa-stack-1x"></i>
-    </div>`;
+    </button>`;
   } else {
     return `
     <button type="button" class="control-icon torch${active ? " active" : ""}" data-action="toggleTorch" data-tooltip="${tooltip}">
       <i class="fas fa-fire"></i>
-    </div>`;
+    </button>`;
   }
 };
 const SOURCE_PALETTE_HTML = (items) => {
@@ -29,14 +29,9 @@ export default class TokenHUD {
   /*
    * Add a button to instruct users how to use the module
    */
-  static async addQueryButton(token, hudHtml) {
-    let tbutton = $(QUERY_BUTTON_HTML);
-    if (hudHtml.find) {
-      hudHtml.find(".col.left").prepend(tbutton);
-    } else {
-      hudHtml.querySelector(".col.left").prepend(tbutton);
-    }
-    tbutton.find("i").click(async (event) => {
+  static async addQueryButton(hud, token, hudHtml) {
+    let tbutton = $(QUERY_BUTTON_HTML)[0];
+    const helpClickListener = async (event) => {
       event.preventDefault();
       event.stopPropagation();
       new Dialog({
@@ -50,7 +45,9 @@ export default class TokenHUD {
         },
         default: "close",
       }).render(true);
-    });
+    };
+    hudHtml.querySelector(".col.left").prepend(tbutton);
+    hud.options.actions["toggleTorchHelp"] = helpClickListener;
   }
   /*
    * Add a torch button to the Token HUD - called from TokenHUD render hook
