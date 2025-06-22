@@ -4,7 +4,7 @@ import TokenHUD from "./hud.mjs";
 import TorchToken from "./token.mjs";
 import TorchApi from "./api.mjs";
 import SourceLibrary from "./library.mjs";
-/* global CONFIG */
+
 /*
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
@@ -49,6 +49,7 @@ class Torch {
     }
     /* Manage torch state */
     TokenHUD.addFlameButton(
+      hud,
       token,
       hudHtml,
       Torch.forceSourceOff,
@@ -138,7 +139,7 @@ Hooks.on("ready", () => {
 Hooks.on("preUpdateSetting", (doc, changes) => {
   if (doc.key === "torch.gameLightSources") {
     let cleanedValue = changes.value;
-    if (changes.value.substring(0,1) === '"') {
+    if (changes.value.substring(0, 1) === '"') {
       cleanedValue = changes.value.substring(1, changes.value.length - 1);
     }
     SourceLibrary.validateSourceJSON(cleanedValue, true);

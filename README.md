@@ -11,7 +11,7 @@ Out of the box, the following are available:
 | System | Sources |
 |--------|---------|
 | CoC7 | Torch, Lamp, Lantern, Candle, Flare 
-| dnd5e | Candle, Torch, Lamp, Bullseye Lantern, Hooded Lantern, Light, Dancing Lights
+| dnd5e | Candle, Torch, Lamp, Bullseye Lantern, Hooded Lantern, Light, Dancing Lights, Produce Flame
 | swade | Candle, Flashlight, Lantern, Torch
 | pf1 | Candle, Lamp, Lantern, Bullseye Lantern, Hooded Lantern, Miner's Lantern, Torch
 | pf2e | Candle, Lantern (Hooded), Lantern (Bull's Eye), Torch. Everburning Torch
@@ -229,7 +229,7 @@ The following is the current status of translation. Some features have arrived, 
 | de    | `[########################]` 24/24 (100%) | ToGreedy, Beff42, MKBraun |
 | en    | `[########################]` 24/24 (100%) | deuce, lupestro |
 | es    | `[########################]` 24/24 (100%) | lozanoje, WallaceMcGregor |
-| fr    | `[############------------]` 12/24 (50%) | Aymeeric |
+| fr    | `[########################]` 24/24 (100%) | Diraen, Aymeeric |
 | it    | `[################--------]` 16/24 (67%) | GregoryWarn |
 | ja    | `[################--------]` 16/24 (67%) | doumoku |
 | pt-br | `[################--------]` 16/24 (67%) | Innocenti, Andersants |
