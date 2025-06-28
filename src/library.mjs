@@ -37,6 +37,11 @@ export default class SourceLibrary {
     let userData;
     let errors;
     let result = true;
+    if (userLibrary === "") {
+      // Actually no user library supplied
+      return [undefined, {}];
+    }
+
     const yamlFileCheck = (library) => {
       return [".yaml", ".yml"].includes(
         library.substring(library.lastIndexOf(".")),
@@ -219,7 +224,8 @@ export default class SourceLibrary {
       } else {
         userData = userLibrary;
       }
-      if (userData) { // User library supplied as object
+      if (userData) {
+        // User library supplied as object
         this.applyFieldDefaults(userData, SourceLibrary.commonLibrary);
       }
     } else {

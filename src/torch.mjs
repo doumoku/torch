@@ -4,7 +4,7 @@ import TokenHUD from "./hud.mjs";
 import TorchToken from "./token.mjs";
 import TorchApi from "./api.mjs";
 import SourceLibrary from "./library.mjs";
-/* global CONFIG */
+
 /*
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
@@ -44,11 +44,12 @@ class Torch {
     if (hud.object.document.name in lightSources) return;
     if (!game.user.isGM && !Settings.playerTorches) return;
     if (!token.currentLightSource) {
-      TokenHUD.addQueryButton(token, hudHtml);
+      TokenHUD.addQueryButton(hud, token, hudHtml);
       return;
     }
     /* Manage torch state */
     TokenHUD.addFlameButton(
+      hud,
       token,
       hudHtml,
       Torch.forceSourceOff,
@@ -106,9 +107,13 @@ class Torch {
         console.log("Torch | --- No test code found", err);
       });
   }
-  static grayOutInventorySettings(html, hide) {
+  static grayOutInventorySettings(html, hide, strategy) {
     for (const setting of ["gmUsesInventory", "playerUsesInventory"]) {
-      const div = html.querySelector(`div[data-setting-id="torch.${setting}"]`);
+      const div =
+        strategy === "v13"
+          ? html.querySelector(`label[for=settings-config-torch\\.${setting}]`)
+              .parentElement
+          : html.querySelector(`div[data-setting-id=torch\\.${setting}]`);
       const label = div.querySelector("label");
       const input = div.querySelector("input");
       const p = div.querySelector("p");
@@ -134,24 +139,34 @@ Hooks.on("ready", () => {
 Hooks.on("preUpdateSetting", (doc, changes) => {
   if (doc.key === "torch.gameLightSources") {
     let cleanedValue = changes.value;
-    if (changes.value.substring(0,1) === '"') {
+    if (changes.value.substring(0, 1) === '"') {
       cleanedValue = changes.value.substring(1, changes.value.length - 1);
     }
     SourceLibrary.validateSourceJSON(cleanedValue, true);
   }
 });
 
-Hooks.on("renderSettingsConfig", (app, [html]) => {
+Hooks.on("renderSettingsConfig", (app, hudHtml) => {
   // Set up grayed settings based on ignoreEquipment at time of render
-  const elem = html.querySelector(
+  const html = hudHtml.querySelector ? hudHtml : hudHtml[0];
+  let strategy = "v12";
+  let elem = html.querySelector(
     `div[data-setting-id="torch.ignoreEquipment"] input`,
   );
-  Torch.grayOutInventorySettings(html, elem.checked);
-  // Change what is grayed as the user changes settings
-  const ignoreEquipmentChangeListener = (event) => {
-    Torch.grayOutInventorySettings(html, event.target.checked);
-  };
-  elem.addEventListener("change", ignoreEquipmentChangeListener);
+  if (!elem) {
+    strategy = "v13";
+    elem = html.querySelector(
+      `input[id=settings-config-torch\\.ignoreEquipment]`,
+    );
+  }
+  if (elem) {
+    Torch.grayOutInventorySettings(html, elem.checked, strategy);
+    // Change what is grayed as the user changes settings
+    const ignoreEquipmentChangeListener = (event) => {
+      Torch.grayOutInventorySettings(html, event.target.checked, strategy);
+    };
+    elem.addEventListener("change", ignoreEquipmentChangeListener);
+  }
 });
 
 Hooks.once("init", () => {

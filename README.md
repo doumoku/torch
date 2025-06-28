@@ -231,7 +231,7 @@ The following is the current status of translation. Some features have arrived, 
 | de    | `[########################]` 24/24 (100%) | ToGreedy, Beff42, MKBraun |
 | en    | `[########################]` 24/24 (100%) | deuce, lupestro |
 | es    | `[########################]` 24/24 (100%) | lozanoje, WallaceMcGregor |
-| fr    | `[############------------]` 12/24 (50%) | Aymeeric |
+| fr    | `[########################]` 24/24 (100%) | Diraen, Aymeeric |
 | it    | `[################--------]` 16/24 (67%) | GregoryWarn |
 | ja    | `[################--------]` 16/24 (67%) | doumoku |
 | pt-br | `[################--------]` 16/24 (67%) | Innocenti, Andersants |
