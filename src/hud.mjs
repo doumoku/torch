@@ -1,21 +1,37 @@
-const BUTTON_HTML = `<div class="control-icon torch"><i class="fas fa-fire"></i></div>`;
-const QUERY_BUTTON_HTML = `<div class="control-icon torch"><i class="fas fa-question"></i></div>`;
-const DISABLED_ICON_HTML = `<i class="fas fa-slash"></i>`;
-const SOURCE_MENU = `<div class="control-icon light-source-menu"></div>`;
-const SOURCE_MENU_ITEM = (img, tooltip) => {
-  return `<button type="button" class="light-source-menu-item" >
-	  <img src="${img}" title="${tooltip}" />
-	</button>`;
+const QUERY_BUTTON_HTML = `<button class="control-icon torch" data-action="toggleTorchHelp"><i class="fas fa-question"></i></button>`;
+const DISABLED_ICON_HTML = `<i class="fas fa-slash fa-stack-1x"></i>`;
+const TORCH_BUTTON_HTML = (tooltip, active, disabled) => {
+  if (disabled) {
+    return `
+    <button type="button" class="control-icon torch fa-stack" data-action="toggleTorch" data-tooltip="${tooltip}">
+      <i class="fas fa-slash fa-stack-1x"></i>
+      <i class="fas fa-fire fa-stack-1x"></i>
+    </button>`;
+  } else {
+    return `
+    <button type="button" class="control-icon torch${active ? " active" : ""}" data-action="toggleTorch" data-tooltip="${tooltip}">
+      <i class="fas fa-fire"></i>
+    </button>`;
+  }
+};
+const SOURCE_PALETTE_HTML = (items) => {
+  return `<div class="palette light-sources" data-palette="lightSources">${items}</div>`;
+};
+const SOURCE_PALETTE_ITEM_HTML = (name, img, clazz) => {
+  return `
+  <a class="light-source-control ${clazz}" data-action="lightSource" data-light-source="${name}">
+    <span><img class="light-source-icon" src="${img}"/>${name}</span>
+  </a>
+  `;
 };
 
 export default class TokenHUD {
   /*
    * Add a button to instruct users how to use the module
    */
-  static async addQueryButton(token, hudHtml) {
-    let tbutton = $(QUERY_BUTTON_HTML);
-    hudHtml.find(".col.left").prepend(tbutton);
-    tbutton.find("i").click(async (event) => {
+  static async addQueryButton(hud, token, hudHtml) {
+    let tbutton = $(QUERY_BUTTON_HTML)[0];
+    const helpClickListener = async (event) => {
       event.preventDefault();
       event.stopPropagation();
       new Dialog({
@@ -29,12 +45,16 @@ export default class TokenHUD {
         },
         default: "close",
       }).render(true);
-    });
+    };
+    hudHtml.querySelector(".col.left").prepend(tbutton);
+    hud.options.actions["toggleTorchHelp"] = helpClickListener;
   }
   /*
    * Add a torch button to the Token HUD - called from TokenHUD render hook
    */
+
   static async addFlameButton(
+    hud,
     token,
     hudHtml,
     forceLightSourceOff,
@@ -42,32 +62,34 @@ export default class TokenHUD {
     togglelightHeld,
     changeLightSource,
   ) {
-    let state = token.lightSourceState;
-    let disabled = token.lightSourceIsExhausted(token.currentLightSource);
-    let tbutton = $(BUTTON_HTML);
-    if (state === token.STATE_ON) {
-      tbutton.addClass("active");
-    } else if (state === token.STATE_DIM) {
-      tbutton.addClass("active");
-    } else if (disabled) {
-      let disabledIcon = $(DISABLED_ICON_HTML);
-      tbutton.addClass("fa-stack");
-      tbutton.find("i").addClass("fa-stack-1x");
-      disabledIcon.addClass("fa-stack-1x");
-      tbutton.prepend(disabledIcon);
+    let sources = token.ownedLightSources;
+
+    // Build the torch button and light source palette HTML
+    let sourceItems = "";
+    for (let source of sources) {
+      const exhausted = token.lightSourceIsExhausted(source.name)
+        ? "exhausted"
+        : "";
+      sourceItems =
+        sourceItems +
+        SOURCE_PALETTE_ITEM_HTML(source.name, source.image, exhausted);
     }
-    hudHtml.find(".col.left").prepend(tbutton);
-    tbutton.find("i.fa-fire").contextmenu(async (event) => {
+    let html = TORCH_BUTTON_HTML(
+      `"${game.i18n.localize("torch.hud.tooltip")}"`, //localized tooltip
+      token.lightSourceState === token.STATE_ON ||
+        token.lightSourceState === token.STATE_DIM, //active
+      token.lightSourceIsExhausted(token.currentLightSource), //disabled
+    );
+    let paletteHtml = SOURCE_PALETTE_HTML(sourceItems);
+    // Get it into the DOM as the top HUD button on the left
+    let tbutton = $(html)[0];
+    let palette = $(paletteHtml)[0];
+
+    //Create listeners
+    const torchClickListener = async (event) => {
       event.preventDefault();
       event.stopPropagation();
-      if (token.lightSourceState === token.STATE_OFF) {
-        TokenHUD.toggleSourceMenu(tbutton, token, changeLightSource);
-      }
-    });
-    tbutton.find("i").click(async (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      if (!tbutton.next().hasClass("light-source-menu")) {
+      if (!palette.classList.contains("active")) {
         if (token.lightSourceIsExhausted(token.currentLightSource)) {
           new Dialog({
             title: game.i18n.localize("torch.help.supplyExhausted.title"),
@@ -92,64 +114,58 @@ export default class TokenHUD {
           }
         }
       }
-    });
-  }
-
-  static toggleSourceMenu(button, token, changeLightSource) {
-    // If we already have a menu, toggle it away
-    let maybeOldMenu = button.next();
-    if (maybeOldMenu.hasClass("light-source-menu")) {
-      maybeOldMenu.remove();
-      return;
-    }
-    // If we don't have a menu, show it
-    let menu = $(SOURCE_MENU);
-    let sources = token.ownedLightSources;
-    let currentSource = token.currentLightSource;
-    for (let source of sources) {
-      let child = $(SOURCE_MENU_ITEM(source.image, source.name));
-      if (source.name === currentSource) {
-        child.addClass("active");
+    };
+    const contextMenuListener = async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (token.lightSourceState === token.STATE_OFF) {
+        palette.classList.toggle("active", true);
       }
-      if (token.lightSourceIsExhausted(source.name)) {
-        child.addClass("exhausted");
-      }
-      child.click(async (ev) => {
-        let menu = $(ev.currentTarget.parentElement);
-        await changeLightSource(token, source.name);
-        TokenHUD.syncDisabledState(button, token);
-        menu.remove();
-      });
-      menu.append(child);
-    }
-    button.after(menu);
+    };
+    const sourceListener = async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const sourceName = // Click could hit the IMG or the enclosing SPAN
+        event.target.tagName === "IMG"
+          ? event.target.parentNode.parentNode.getAttribute("data-light-source")
+          : event.target.tagName === "SPAN"
+            ? event.target.parentNode.getAttribute("data-light-source")
+            : event.target.getAttribute("data-light-source");
+      await changeLightSource(token, sourceName);
+      TokenHUD.syncDisabledState(tbutton, token);
+      palette.classList.toggle("active", false);
+    };
+    // Enable torch button click, context menu, and light source listeners
+    hud.options.actions["toggleTorch"] = torchClickListener;
+    hud.options.actions["lightSource"] = sourceListener;
+    tbutton.addEventListener("contextmenu", contextMenuListener);
+    hudHtml.querySelector(".col.left").prepend(tbutton, palette);
   }
 
   static syncDisabledState(tbutton, token) {
-    let oldSlash = tbutton.find(".fa-slash");
-    let wasDisabled = oldSlash.length > 0;
+    let oldSlash = tbutton.querySelector(".fa-slash");
+    let wasDisabled = !!oldSlash;
     let willBeDisabled = token.lightSourceIsExhausted(token.currentLightSource);
     if (!wasDisabled && willBeDisabled) {
       let disabledIcon = $(DISABLED_ICON_HTML);
-      tbutton.addClass("fa-stack");
-      tbutton.find("i").addClass("fa-stack-1x");
-      disabledIcon.addClass("fa-stack-1x");
+      tbutton.classList.add("fa-stack");
+      tbutton.querySelector("i").classList.add("fa-stack-1x");
       tbutton.prepend(disabledIcon);
     } else if (wasDisabled && !willBeDisabled) {
       oldSlash.remove();
-      tbutton.find("i").removeClass("fa-stack-1x");
-      tbutton.removeClass("fa-stack");
+      tbutton.querySelector("i").classList.remove("fa-stack-1x");
+      tbutton.classList.remove("fa-stack");
     }
   }
 
   static syncFlameButtonState(tButton, token) {
     let state = token.lightSourceState;
     if (state === token.STATE_ON) {
-      tButton.addClass("active");
+      tButton.classList.add("active");
     } else if (state === token.STATE_DIM) {
-      tButton.addClass("active");
+      tButton.classList.add("active");
     } else {
-      tButton.removeClass("active");
+      tButton.classList.remove("active");
     }
   }
 }

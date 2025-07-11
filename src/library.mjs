@@ -11,6 +11,7 @@ import schema from "./schema.mjs";
 export default class SourceLibrary {
   static commonLibrary;
   library;
+  ignoreEquipment = false;
   constructor(library) {
     // Only invoke through static factory method load()
     this.library = library;
@@ -36,6 +37,11 @@ export default class SourceLibrary {
     let userData;
     let errors;
     let result = true;
+    if (userLibrary === "") {
+      // Actually no user library supplied
+      return [undefined, {}];
+    }
+
     const yamlFileCheck = (library) => {
       return [".yaml", ".yml"].includes(
         library.substring(library.lastIndexOf(".")),
@@ -174,6 +180,24 @@ export default class SourceLibrary {
     }
   }
 
+  static updateFallbackLightSource(library, item, bright, dim) {
+    const hash = library.sources;
+    const name = Object.keys(hash)[0];
+    if (item) {
+      delete hash[name];
+      hash[item] = {
+        name: item,
+        type: "none",
+        consumable: false,
+        states: 2,
+        light: [{ bright: bright, dim: dim, angle: 360 }],
+      };
+    } else {
+      hash[name].light[0].bright = bright;
+      hash[name].light[0].dim = dim;
+    }
+  }
+
   static async load(
     systemId,
     selfBright,
@@ -181,22 +205,14 @@ export default class SourceLibrary {
     selfItem,
     userLibrary,
     protoLight,
+    ignoreEquipment,
   ) {
     // The common library is now baked in as source but applied only once.
     if (!SourceLibrary.commonLibrary) {
-      SourceLibrary.commonLibrary = commonSources; 
+      SourceLibrary.commonLibrary = commonSources;
       this.applyFieldDefaults(SourceLibrary.commonLibrary);
     }
 
-    let defaultLight = Object.assign({}, protoLight);
-    defaultLight.bright = selfBright;
-    defaultLight.dim = selfDim;
-    let configuredLight = {
-      system: systemId,
-      name: selfItem,
-      states: 2,
-      light: [defaultLight],
-    };
     // If userLibrary is a string, it needs to be fetched, otherwise it is literal data.
     let userData;
     if (userLibrary) {
@@ -208,7 +224,8 @@ export default class SourceLibrary {
       } else {
         userData = userLibrary;
       }
-      if (userData) { // User library supplied as object
+      if (userData) {
+        // User library supplied as object
         this.applyFieldDefaults(userData, SourceLibrary.commonLibrary);
       }
     } else {
@@ -219,28 +236,39 @@ export default class SourceLibrary {
     let mergedLibrary = mergeLibraries(
       userData,
       SourceLibrary.commonLibrary,
-      configuredLight,
+      ignoreEquipment, //Makes nothing consumable
     );
 
     // All local changes here take place against the merged data, which is a copy,
-    // not against the common or user libraries.
+    // not against the common or user libraries. Likewise, ignoreEquipment turns
+    // off consumable across the merged data only.
     if (mergedLibrary[systemId]) {
+      // Since we're always drawing from the raw common or user library data,
+      // the initial topology here is always the topology name and not the object.
+      // So this overwrite of the topology is safe.
       mergedLibrary[systemId].topology = getTopology(
         mergedLibrary[systemId].topology,
         mergedLibrary[systemId].quantity,
       );
       let library = new SourceLibrary(mergedLibrary[systemId]);
+      library.ignoreEquipment = ignoreEquipment;
       return library;
     } else {
+      // This clause should be a clone of the if clause above for the systemId "default",
+      // with the fallback light source update from settings in the middle.
       mergedLibrary["default"].topology = getTopology(
         mergedLibrary["default"].topology,
         mergedLibrary["default"].quantity,
       );
-
-      let defaultLibrary = mergedLibrary["default"];
-      defaultLibrary.sources["Self"].light[0].bright = selfBright;
-      defaultLibrary.sources["Self"].light[0].dim = selfDim;
-      return new SourceLibrary(defaultLibrary);
+      this.updateFallbackLightSource(
+        mergedLibrary["default"],
+        selfItem,
+        selfBright,
+        selfDim,
+      );
+      const library = new SourceLibrary(mergedLibrary["default"]);
+      library.ignoreEquipment = ignoreEquipment;
+      return library;
     }
   }
 
@@ -277,12 +305,16 @@ export default class SourceLibrary {
   }
   actorHasLightSource(actor, lightSourceName) {
     let source = this.getLightSource(lightSourceName);
-    return this.library.topology.actorHasLightSource(actor, source);
+    return (
+      this.ignoreEquipment ||
+      this.library.topology.actorHasLightSource(actor, source)
+    );
   }
   actorLightSources(actor) {
     let result = [];
     for (let source in this.library.sources) {
       if (
+        this.ignoreEquipment ||
         this.library.topology.actorHasLightSource(
           actor,
           this.library.sources[source],
@@ -307,7 +339,11 @@ export default class SourceLibrary {
 /*
  * Create a merged copy of two libraries.
  */
-let mergeLibraries = function (userLibrary, commonLibrary, configuredLight) {
+let mergeLibraries = function (
+  userLibrary,
+  commonLibrary,
+  nothingIsConsumable,
+) {
   let mergedLibrary = {};
 
   // Merge systems - system properties come from common library unless the system only exists in user library
@@ -340,61 +376,27 @@ let mergeLibraries = function (userLibrary, commonLibrary, configuredLight) {
         mergedLibrary[system].sources[source] = {
           name: userSource["name"],
           type: userSource["type"],
-          consumable: userSource["consumable"],
+          consumable: nothingIsConsumable ? false : userSource["consumable"],
           states: userSource["states"],
           light: Object.assign({}, userSource["light"]),
         };
-      }
-    }
-    // Source properties for configured source override common library but not user library
-    let configuredName = "";
-    if (configuredLight.name) {
-      let inUserLibrary = false;
-      let template = null;
-      if (system === configuredLight.system) {
-        for (let source in mergedLibrary[system].sources) {
-          if (source.toLowerCase() === configuredLight.name.toLowerCase()) {
-            inUserLibrary = true;
-            break;
-          }
-        }
-        if (!inUserLibrary && commonLibrary[system]) {
-          for (let source in commonLibrary[system].sources) {
-            if (source.toLowerCase() === configuredLight.name.toLowerCase()) {
-              configuredName = source;
-              template = commonLibrary[system].sources[source];
-              break;
-            }
-          }
-          if (!configuredName) {
-            configuredName = configuredLight.name; //But might be blank
-          }
-          // We finally have the best name to use and perhaps a template
-          // We can build one
-          mergedLibrary[system].sources[configuredName] = {
-            name: configuredName,
-            type: template ? template["type"] : "equipment",
-            consumable: template ? template["consumable"] : true,
-            states: configuredLight.states,
-            light: configuredLight.light,
-          };
-        }
       }
     }
     // Finally, we will deal with the common library for whatever is left
     if (system in commonLibrary) {
       for (let source in commonLibrary[system].sources) {
         if (
-          (!userLibrary ||
-            !(system in userLibrary) ||
-            !(source in userLibrary[system].sources)) &&
-          (!configuredName || source !== configuredName)
+          !userLibrary ||
+          !(system in userLibrary) ||
+          !(source in userLibrary[system].sources)
         ) {
           let commonSource = commonLibrary[system].sources[source];
           mergedLibrary[system].sources[source] = {
             name: commonSource["name"],
             type: commonSource["type"],
-            consumable: commonSource["consumable"],
+            consumable: nothingIsConsumable
+              ? false
+              : commonSource["consumable"],
             states: commonSource["states"],
             light: Object.assign({}, commonSource["light"]),
           };

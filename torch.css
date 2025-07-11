@@ -1,24 +1,43 @@
+.torch-inactive {
+    color: gray !important;
+}
+
 .control-icon.torch i.fa-slash {
     position: absolute;
     color: tomato;
 }
-.control-icon.torch + .light-source-menu {
-    padding: 2px 2px 4px;
-    width: 30px;
+
+#token-hud .light-sources {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    min-width: 140px;
+    padding: 3px;
+    gap: 3px;
+    text-align: left;
+    font-size: var(--font-size-16);
+    color: var(--control-icon-color);
 }
 
-.control-icon.torch + .light-source-menu .light-source-menu-item {
-    border: 1px solid var(--color-border-light-primary); 
-    padding: 0;
-    margin: 0;
+#token-hud .light-sources .light-source-control {
+  flex: 1;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 3px;
+  white-space:nowrap;
 }
 
-.control-icon.torch + .light-source-menu button.light-source-menu-item img {
-    margin: 0;
+#token-hud .light-sources .light-source-control.active {
+    color: var(--control-active-icon-color);
+    border-color: var(--control-active-border-color);
 }
-.control-icon.torch + .light-source-menu .light-source-menu-item.active {
-    border-color: tomato;
-}
-.control-icon.torch + .light-source-menu .light-source-menu-item.exhausted {
+
+#token-hud .light-sources .light-source-control.exhausted {
     opacity: 0.3;
+}
+
+#token-hud .light-sources .light-source-icon {
+  display: inline;
+  height: 16px;
+  width: 16px;
 }

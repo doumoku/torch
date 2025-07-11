@@ -15,7 +15,7 @@ describe("Torch Token Tests >", () => {
       let actor = new MockActor(
         "1234567",
         "Versatile",
-        [new MockItem("Torch", 1), new MockItem("HoodedLantern")],
+        [new MockItem("Torch", 1), new MockItem("Hooded Lantern")],
         15,
         30,
       );
@@ -31,6 +31,47 @@ describe("Torch Token Tests >", () => {
       let currentSource = token.currentLightSource;
       assert.ok(sources, "Owned light sources came back in one piece");
       assert.ok(currentSource, "The token has a current source");
+      assert.strictEqual(
+        sources.length,
+        2,
+        "Exactly as many owned light sources came back as expected",
+      );
+    });
+
+    it("Light source selection - ignore equipment", async () => {
+      // Set up data
+      let actor = new MockActor(
+        "1234567",
+        "Versatile",
+        [new MockItem("Torch", 1), new MockItem("Hooded Lantern")],
+        15,
+        30,
+      );
+      globalThis.game = new MockGame("dnd5e", [actor], false, {
+        gmInventoryItemName: "Other",
+        gmUsesInventory: true,
+        playerUsesInventory: true,
+      });
+      let library = await SourceLibrary.load(
+        "dnd5e",
+        10,
+        20,
+        undefined,
+        undefined,
+        undefined,
+        true,
+      );
+      // Perform test
+      let token = new TorchToken(new MockToken(actor, "Torch"), library);
+      let sources = token.ownedLightSources;
+      let currentSource = token.currentLightSource;
+      assert.ok(sources, "Owned light sources came back in one piece");
+      assert.ok(currentSource, "The token has a current source");
+      assert.strictEqual(
+        sources.length,
+        18,
+        "All the light sources came back as owned",
+      );
     });
 
     it("Cycle of token states - torch", async () => {
@@ -38,7 +79,7 @@ describe("Torch Token Tests >", () => {
       let actor = new MockActor(
         "1234567",
         "Versatile",
-        [new MockItem("Torch", 1), new MockItem("HoodedLantern")],
+        [new MockItem("Torch", 1), new MockItem("Hooded Lantern")],
         15,
         30,
       );

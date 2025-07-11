@@ -115,7 +115,7 @@ class DefaultLightTopology {
   quantityField = "quantity";
   constructor(/*quantityField*/) {}
   actorHasLightSource(actor, lightSource) {
-    return !!(lightSource && lightSource.name === "Self");
+    return !!lightSource;
   }
   getImage(/*actor, lightSource*/) {
     return DEFAULT_IMAGE_URL;

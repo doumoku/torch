@@ -1,0 +1,34 @@
+{
+    "CoC7": {
+        "system": "CoC7",
+        "topology": "standard",
+        "quantity": "quantity",
+        "aliases": {
+            "Flashlight": "Flashlight (Electric)"
+        },
+        "sources": {
+            "Flashlight": {
+                "name": "Flashlight",
+                "type": "item",
+                "consumable": false,
+                "states": 2,
+                "light": [
+                    {
+                        "bright": 5,
+                        "dim": 20,
+                        "angle": 90,
+                        "rotation": 180,
+                        "color": "#ffe5b8",
+                        "alpha": 0.15,
+                        "animation": {
+                            "type": "none",
+                            "speed": 5,
+                            "intensity": 5,
+                            "reverse": false
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

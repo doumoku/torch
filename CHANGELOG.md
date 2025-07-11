@@ -2,6 +2,52 @@
 
 ## Middle Kingdom - v10 -> main branch
 
+### 3.0.1 - June 22, 2025 - Restored help button for actor having no light sources
+- [BUGFIX] The move of the HUD to App v2 required changes to the code that shows a [?] button instead of the torch button and provides guidance when the user has no light sources. This guidance is now restored. Thanks to Mika for the heads up and for patience with my slow response in addressing the problem.
+
+### 3.0.0 - June 15, 2025 - Foundry 13 fixes - No longer supports v12
+- [BREAKING] Now supports v13 and up only - supporting HUD on v12 with appV1 and v13 with appV2 at the same time got really messy
+- [FEATURE] Light source list is now a real palette of names with icons.
+- [BUGFIX] Was giving parse errors on nonexistent light sources file when no file was provided.
+
+### 2.21.2 - May 1, 2025 - French support
+- [BUGFIX] Updated French localization (thanks Diraen!)
+
+### 2.21.1 - April 20, 2025 - Config Settings fix for Foundry 13
+- [BUGFIX] Adapted to support HTML changes in config settings for Foundry 13 while still supporting Foundry 12.
+
+### 2.21.0 - April 12, 2025 - Updates for Spanish and CoC7
+- [FEATURE] Updated Spanish translations - thanks, lozonje!
+- [FEATURE] CoC7 light sources - thanks again, lozonje!
+
+### 2.20.2 - March 26, 2025 - Foundry 13 readiness 
+- [BUGFIX] Provided translation for Torch tooltip on HUD
+- [INTERNAL] Bumped support to include all builds of Foundry 13
+- [BUGFIX] Included "Produce Flame" cantrip in DnD5e set of predefined light sources
+
+### 2.20.1 - January 25, 2025 - Config changes for fallback now immediately honored
+- [BUGFIX] Fallback light source no longer requires a system reload to update  (#100)
+
+### 2.20.0 - January 19, 2025 - Added hook for torch changes
+- [FEATURE] Added hooks "torch.changed" and "torch.selected" so macros can respond to torch changes.
+
+### 2.19.0 - January 18, 2025 - Updated German translation
+- [FEATURE] German translation updated with 8 strings - thanks, MKBraun!
+
+### 2.18.0 - January 12, 2025 - Dim/Bright config is now purely fallback
+- [FEATURE] Eliminated confusing name/bright/dim override setting.
+  * On systems that have no sources configured, a source with this name and those light values becomes the sole source.
+  * On systems that have sources configured, the name specifies which source to use by default, rather than "just picking one." (The dim/bright values are completely ignored on these systems.)
+
+### 2.17.0 - January 11, 2025 - Ignore Equipment flag
+- [FEATURE] New config flag to completely ignore user equipment. Users can turn on any light source defined for the system.
+- [FEATURE] Rearranged config settings in preparation for give the last three settings a clearer role.
+- [INTERNAL] Tested and adjusted to work both with v12 and with early builds of v13.
+
+### 2.16.0 - October 20, 2024 - Token HUD light source tooltips
+- [FEATURE] Tooltips for the light sources are now much easier to read (and they don't disappear altogether in v13 proto 1. Now using standard Foundry tooltips.)
+- [INTERNAL] This module appears to work fine in v13.332, but is likely to break and need adjustment when Token HUD becomes a v2 app later in the v13 development cycle. The maximum version has been set accordingly. 
+
 ### 2.15.1 - September 2, 2024 - Better error message for missing user sources file
 - [BUGFIX] The error message for a missing user sources file was cryptic - now just tells you
 - [BUGFIX] The fallbacks for lights as object to array and for missing states property weren't working

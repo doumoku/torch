@@ -1,6 +1,6 @@
 # Torch module for Foundry VTT
 
-This module provides a HUD toggle button for turning on and off a configurable radius of bright and dim light around you. This default source ("Self") is provided for any system for which we don't supply more specialized capabilities. 
+This module provides a HUD toggle button for turning on and off a configurable radius of bright and dim light around you. A default source can be configured in settings for any system for which we don't supply more specialized capabilities.
 
 However, we now have a variety of core light sources configured for D&D 5th Ed, Savage Worlds, Pathfinder 1st and 2nd editions, GURPS, and Earthdawn. You can select which light source the button will manipulate by right-clicking and clicking the desired source from the menu of buttons that appear for light sources in the actor's inventory or spell list. 
 
@@ -10,7 +10,8 @@ Out of the box, the following are available:
 
 | System | Sources |
 |--------|---------|
-| dnd5e | Candle, Torch, Lamp, Bullseye Lantern, Hooded Lantern, Light, Dancing Lights
+| CoC7 | Torch, Lamp, Lantern, Candle, Flare 
+| dnd5e | Candle, Torch, Lamp, Bullseye Lantern, Hooded Lantern, Light, Dancing Lights, Produce Flame
 | swade | Candle, Flashlight, Lantern, Torch
 | pf1 | Candle, Lamp, Lantern, Bullseye Lantern, Hooded Lantern, Miner's Lantern, Torch
 | pf2e | Candle, Lantern (Hooded), Lantern (Bull's Eye), Torch. Everburning Torch
@@ -25,9 +26,27 @@ Out of the box, the following are available:
 | demonlord  | Candle, Lantern, Spotlight Lantern, Torch 
 | wwn | Torch, Lantern, Flamesight, The Light of Faith
 
-This module just sheds light from the location of a player token upon demand based upon equipment inventory. It is recommended *not* to use this module for spells or equipment that have other capabilities you intend to use, like performing damage or setting down the equipment, but to rely upon other common approaches, like active effects or item piles, for those.
+This module works by changing the token's light settings, so the only properties you can control are those available to a token, not those available to a light as created in Lighting Controls. 
 
-Because the light source to use is now user-configurable, we no longer select a light source for you based on fallbacks. As it stands, if you do not explicitly select your light source, it will pick any among the light sources you have equipped, in no particular order. 
+This module sheds light from the location of a player token upon demand based upon equipment inventory. It is recommended *not* to use this module for spells or equipment that have other capabilities you intend to use, like performing damage or setting down the equipment, but to rely upon other common approaches, like active effects or item piles, for those.
+
+Because the light source to use is now user-configurable, we no longer select a light source for you based on fallbacks. As it stands, if you do not explicitly select your light source, it will pick any among the light sources you have equipped, in no particular order. To work around this, just right click the torch icon and select one.
+
+Also, light source identification is by name and the built-in light sources are in English. This means you may need to create a custom light source file to supply aliases in the language in which you're playing the game. Of course, if I were provided the localized names, localized aliases *could* find their way into the built-in list over time as well, streamlining play.
+
+When you turn off a light source, it resets the token's light settings to the settings of the actor's prototype token. This offers a footgun: If you "Assign Token" the prototype token from a token that has a torch turned on, those light settings end up in the prototype token and it will appear that you can no longer turn your torch offf. To correct this, you have to clean up the light settings on the prototype token by hand so that your token turns off properly. To avoid this hassle, "Torch off" the token you've so carefully prepared before clicking "Assign Token" on your prototype token.
+
+## Game settings
+
+Besides the user light source file described in the following section:
+
+* We ordinarily decrease the quantity of consumable light sources on every use. We provide an option to suppress this, so characters don't have to keep track of how many they've got and buy more torches or candles when they're in town. 
+* We now also provide a game-wide option for completely ignoring the player's equipment list, making it possible for any player to pick any light source defined in the system. 
+* And, as has been true from the beginning, there is an option so that only a GM can light a character's torch, thereby ensuring the players are forced to rely upon the thief's flickering candle in that dark, spooky dungeon. 
+
+It all depends how you want to run your game.
+
+The bright and dim light settings are intended only as a fallback for use when you are playing in a system where nobody has supplied a set of light sources. The settings will appear with the light source name specified with them. (In systems which *do* have a set of light sources, the fallback name identifies the source to use if the user hasn't yet selected a light source.)
 
 ## Customizing light sources
 
@@ -185,6 +204,20 @@ Returns the remaining quantity of the specified light source for the specified t
 ### `game.Torch.sourceExhausted(sceneId, tokenId, source)`
 Returns true if the specified light source is consumable, and the instance held by the specified token has no more inventory.
 
+## Hooks for macro authors
+Because sometimes you want to respond to somebody clicking on the torch in the HUD, we also provide the following hooks:
+
+### `"torch.changed" token, source, state`
+The light source state changed, either via toggling or by turning off directly.
+* **token**: The token for which the light source state has changed
+* **source**: The name of the light source
+* **state**: The new state - "on", "dim", "off"
+
+### `"torch.selected" token, source`
+A new light source was selected.
+* **token**: The token for which the light source has been selected
+* **source**: The name of the light source now selected
+
 ## Changelog - now in [separate file](./CHANGELOG.md)
 
 ## Translation Status
@@ -193,15 +226,15 @@ The following is the current status of translation. Some features have arrived, 
 
 | Language | Completion | Contributors |
 | -------- | ---------- | ------------ |
-| de    | `[######################]` 22/22 (100%) | ToGreedy, Beff42 |
-| en    | `[######################]` 22/22 (100%) | deuce, lupestro |
-| es    | `[######################]` 12/22 (100%) | lozanoje, WallaceMcGregor |
-| fr    | `[##################----]` 18/22 (82%) | Aymeeric |
-| it    | `[######################]` 22/22 (100%) | GregoryWarn |
-| ja    | `[######################]` 22/22 (100%) | doumoku |
-| pt-br | `[######################]` 22/22 (100%) | Innocenti, Andersants |
-| zh-cn | `[##########------------]` 10/22 (56%) | xticime |
-| zh-tw | `[############----------]` 12/22 (45%) | zeteticl |
+| de    | `[########################]` 24/24 (100%) | ToGreedy, Beff42, MKBraun |
+| en    | `[########################]` 24/24 (100%) | deuce, lupestro |
+| es    | `[########################]` 24/24 (100%) | lozanoje, WallaceMcGregor |
+| fr    | `[########################]` 24/24 (100%) | Diraen, Aymeeric |
+| it    | `[################--------]` 16/24 (67%) | GregoryWarn |
+| ja    | `[################--------]` 16/24 (67%) | doumoku |
+| pt-br | `[################--------]` 16/24 (67%) | Innocenti, Andersants |
+| zh-cn | `[######------------------]` 06/24 (25%) | xticime |
+| zh-tw | `[########----------------]` 08/24 (33%) | zeteticl |
 
 PRs for further translations will be dealt with promptly. While Korean is most especially desired (thank you, doumoku for Japanese, also on the short list) - all others are welcome. 
 

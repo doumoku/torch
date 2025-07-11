@@ -10,11 +10,12 @@ export default class TorchAPI {
 
     let library = await SourceLibrary.load(
       game.system.id,
-      Settings.lightRadii.bright,
-      Settings.lightRadii.dim,
-      Settings.inventoryItemName,
+      Settings.fallbackLightRadii.bright,
+      Settings.fallbackLightRadii.dim,
+      Settings.fallbackSourceName,
       Settings.gameLightSources,
       actor.prototypeToken.light,
+      Settings.ignoreEquipment,
     );
     return new TorchToken(tokenDoc, library);
   }

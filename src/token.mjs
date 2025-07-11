@@ -50,7 +50,7 @@ export default class TorchToken {
       return lightSource;
     }
     // The one the GM asked for
-    let itemName = Settings.inventoryItemName;
+    let itemName = Settings.fallbackSourceName;
     let namedSource = itemName
       ? this._ownedSources.find(
           (item) => item.name.toLowerCase() === itemName.toLowerCase(),
@@ -94,7 +94,9 @@ export default class TorchToken {
     // Need to deal with dancing lights
     let priorState = this._token.getFlag("torch", "lightSourceState");
     await this._token.setFlag("torch", "lightSourceState", this.STATE_OFF);
-    await this._turnOffSource(priorState === this.STATE_OFF || priorState === undefined);
+    await this._turnOffSource(
+      priorState === this.STATE_OFF || priorState === undefined,
+    );
   }
 
   async advanceState() {

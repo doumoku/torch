@@ -15,20 +15,22 @@ export default class Settings {
   static get playerTorches() {
     return game.settings.get("torch", "playerTorches");
   }
+  static get ignoreEquipment() {
+    return game.settings.get("torch", "ignoreEquipment");
+  }
   static get gmUsesInventory() {
     return game.settings.get("torch", "gmUsesInventory");
   }
   static get userUsesInventory() {
     return game.settings.get("torch", "playerUsesInventory");
   }
-
-  static get inventoryItemName() {
-    return game.settings.get("torch", "gmInventoryItemName");
+  static get fallbackSourceName() {
+    return game.settings.get("torch", "fallbackSourceName");
   }
-  static get lightRadii() {
+  static get fallbackLightRadii() {
     return {
-      bright: game.settings.get("torch", "brightRadius"),
-      dim: game.settings.get("torch", "dimRadius"),
+      bright: game.settings.get("torch", "fallbackBrightRadius"),
+      dim: game.settings.get("torch", "fallbackDimRadius"),
     };
   }
   static get gameLightSources() {
@@ -42,78 +44,85 @@ export default class Settings {
   }
 
   static get helpText() {
-    let turnOffLights = game.i18n.localize("torch.turnOffAllLights");
-    let ctrlOnClick = game.i18n.localize("torch.holdCtrlOnClick");
+    let turnOffLights = game.i18n.localize("torch.help.turnOffAllLights");
+    let ctrlOnClick = game.i18n.localize("torch.help.holdCtrlOnClick");
     return CTRL_REF_HTML(turnOffLights, ctrlOnClick);
   }
-
   static register() {
-    game.settings.register("torch", "playerTorches", {
-      name: game.i18n.localize("torch.playerTorches.name"),
-      hint: game.i18n.localize("torch.playerTorches.hint"),
-      scope: "world",
-      config: true,
-      default: true,
-      type: Boolean,
-    });
-    game.settings.register("torch", "gmUsesInventory", {
-      name: game.i18n.localize("torch.gmUsesInventory.name"),
-      hint: game.i18n.localize("torch.gmUsesInventory.hint"),
-      scope: "world",
-      config: true,
-      default: false,
-      type: Boolean,
-    });
-    game.settings.register("torch", "playerUsesInventory", {
-      name: game.i18n.localize("torch.playerUsesInventory.name"),
-      hint: game.i18n.localize("torch.playerUsesInventory.hint"),
-      scope: "world",
-      config: true,
-      default: true,
-      type: Boolean,
-    });
-    game.settings.register("torch", "gmInventoryItemName", {
-      name: game.i18n.localize("torch.gmInventoryItemName.name"),
-      hint: game.i18n.localize("torch.gmInventoryItemName.hint"),
-      scope: "world",
-      config: true,
-      default: "torch",
-      type: String,
-    });
     game.settings.register("torch", "gameLightSources", {
-      name: game.i18n.localize("torch.gameLightSources.name"),
-      hint: game.i18n.localize("torch.gameLightSources.hint"),
+      name: game.i18n.localize("torch.settings.gameLightSources.name"),
+      hint: game.i18n.localize("torch.settings.gameLightSources.hint"),
       filePicker: "any",
       scope: "world",
       config: true,
       default: "",
       type: String,
     });
-    game.settings.register("torch", "brightRadius", {
-      name: game.i18n.localize("torch.brightRadius.name"),
-      hint: game.i18n.localize("torch.brightRadius.hint"),
+    game.settings.register("torch", "playerTorches", {
+      name: game.i18n.localize("torch.settings.playerTorches.name"),
+      hint: game.i18n.localize("torch.settings.playerTorches.hint"),
       scope: "world",
       config: true,
-      default: 20,
-      type: Number,
+      default: true,
+      type: Boolean,
     });
-    game.settings.register("torch", "dimRadius", {
-      name: game.i18n.localize("torch.dimRadius.name"),
-      hint: game.i18n.localize("torch.dimRadius.hint"),
+    game.settings.register("torch", "ignoreEquipment", {
+      name: game.i18n.localize("torch.settings.ignoreEquipment.name"),
+      hint: game.i18n.localize("torch.settings.ignoreEquipment.hint"),
       scope: "world",
       config: true,
-      default: 40,
-      type: Number,
+      default: false,
+      type: Boolean,
+    });
+    game.settings.register("torch", "gmUsesInventory", {
+      name: game.i18n.localize("torch.settings.gmUsesInventory.name"),
+      hint: game.i18n.localize("torch.settings.gmUsesInventory.hint"),
+      scope: "world",
+      config: true,
+      default: false,
+      type: Boolean,
+    });
+    game.settings.register("torch", "playerUsesInventory", {
+      name: game.i18n.localize("torch.settings.playerUsesInventory.name"),
+      hint: game.i18n.localize("torch.settings.playerUsesInventory.hint"),
+      scope: "world",
+      config: true,
+      default: true,
+      type: Boolean,
     });
     if (game.system.id === "dnd5e") {
       game.settings.register("torch", "dancingLightVision", {
-        name: game.i18n.localize("torch.dancingLightVision.name"),
-        hint: game.i18n.localize("torch.dancingLightVision.hint"),
+        name: game.i18n.localize("torch.settings.dancingLightVision.name"),
+        hint: game.i18n.localize("torch.settings.dancingLightVision.hint"),
         scope: "world",
         config: true,
         default: false,
         type: Boolean,
       });
     }
+    game.settings.register("torch", "fallbackSourceName", {
+      name: game.i18n.localize("torch.settings.fallbackSourceName.name"),
+      hint: game.i18n.localize("torch.settings.fallbackSourceName.hint"),
+      scope: "world",
+      config: true,
+      default: "torch",
+      type: String,
+    });
+    game.settings.register("torch", "fallbackBrightRadius", {
+      name: game.i18n.localize("torch.settings.fallbackBrightRadius.name"),
+      hint: game.i18n.localize("torch.settings.fallbackBrightRadius.hint"),
+      scope: "world",
+      config: true,
+      default: 20,
+      type: Number,
+    });
+    game.settings.register("torch", "fallbackDimRadius", {
+      name: game.i18n.localize("torch.settings.fallbackDimRadius.name"),
+      hint: game.i18n.localize("torch.settings.fallbackDimRadius.hint"),
+      scope: "world",
+      config: true,
+      default: 40,
+      type: Number,
+    });
   }
 }

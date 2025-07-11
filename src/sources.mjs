@@ -6,6 +6,14 @@ export default {
     "aliases": {
       "Lantern, Hooded": "Hooded Lantern",
       "Lantern, Bullseye": "Bullseye Lantern",
+      "Antorcha": "Torch",
+      "Vela": "Candle",
+      "Linterna Sorda": "Hooded Lantern",
+      "Linterna Ojo de Buey": "Bullseye Lantern",
+      "Luz": "Light",
+      "Luces Danzantes": "Dancing Lights",
+      "Crear llama, flamear": "Produce Flame",
+      "Candil": "Lamp",
     },
     "sources": {
       "Candle": {
@@ -59,6 +67,13 @@ export default {
         "consumable": false,
         "states": 2,
         "light": [{ "bright": 0, "dim": 10, "angle": 360 }],
+      },
+      "Produce Flame": {
+        "name": "Produce Flame",
+        "type": "cantrip",
+        "consumable": false,
+        "states": 2,
+        "light": [{ "bright": 20, "dim": 40, "angle": 360, "color": "#ff9329", "alpha": 1, "attenuation": 0.8 }],
       },
     },
   },
@@ -868,6 +883,102 @@ export default {
         "consumable": false,
         "states": 2,
         "light": [{ "bright": 0, "dim": 20, "angle": 360 }],
+      },
+    },
+  },
+  "CoC7": {
+    "system": "CoC7",
+    "topology": "standard",
+    "quantity": "quantity",
+    "aliases": {
+      "Antorcha": "Torch",
+      "Antorcha encendida": "Torch",
+      "Candelabro": "Candle",
+      "Candil": "Lamp",
+      "Cocina de camping de propano": "Candle",
+      "Lámpara": "Lamp",
+      "Lámpara de carburo": "Lamp",
+      "Lámpara fluorescente de 6 W": "Lamp",
+      "Linterna": "Lantern",
+      "Linterna de gasolina": "Lantern",
+      "Linterna de queroseno": "Lantern",
+      "Linterna eléctrica": "Lantern",
+      "Linterna pequeña": "Lantern",
+      "Linterna sellada": "Lantern",
+      "Bengala": "Flare",
+      "Bengala (de un solo uso)": "Flare",
+      "Pistola de bengalas": "Flare",
+      "Vela": "Candle",
+      "Velas de 15 horas": "Candle",
+    },
+    "sources": {
+      "Torch": {
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [
+          {
+            "bright": 20,
+            "dim": 40,
+            "angle": 360,
+          },
+        ],
+      },
+      "Lamp": {
+        "type": "equipment",
+        "consumable": false,
+        "states": 2,
+        "light": [
+          {
+            "bright": 15,
+            "dim": 45,
+            "angle": 360,
+          },
+        ],
+      },
+      "Lantern": {
+        "type": "equipment",
+        "consumable": false,
+        "states": 2,
+        "light": [
+          {
+            "bright": 60,
+            "dim": 120,
+            "angle": 57,
+          },
+        ],
+      },
+      "Candle": {
+        "type": "equipment",
+        "consumable": true,
+        "states": 2,
+        "light": [
+          {
+            "bright": 5,
+            "dim": 10,
+            "angle": 360,
+          },
+        ],
+      },
+      "Flare": {
+        "type": "equipment",
+        "consumable": false,
+        "states": 2,
+        "light": [
+          {
+            "bright": 100,
+            "dim": 200,
+            "angle": 360,
+            "color": "#ff9329",
+            "alpha": 0.5,
+            "animation": {
+              "type": "sunburst",
+              "speed": 5,
+              "intensity": 5,
+              "reverse": false,
+            },
+          },
+        ],
       },
     },
   },
