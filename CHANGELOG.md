@@ -2,7 +2,7 @@
 
 ## Middle Kingdom - v10 -> main branch
 
-### 3.0.2 - July 26, 2025 - Fix issue stealing ENTER click
+### 3.0.2 - July 26, 2025 - Fix issue with stealing ENTER click
 - [BUGFIX] Torch help button when actor has no light sources was stealing the ENTER click when setting HP on DnD5e.
   - It might also affect some other systems but didn't affect all systems.
   - Explicitly setting the `type="button"` attribute on the torch help button appeared to correct the problem.
