@@ -2,6 +2,12 @@
 
 ## Middle Kingdom - v10 -> main branch
 
+### 3.0.2 - July 26, 2025 - Fix issue with stealing ENTER click
+- [BUGFIX] Torch help button when actor has no light sources was stealing the ENTER click when setting HP on DnD5e.
+  - It might also affect some other systems but didn't affect all systems.
+  - Explicitly setting the `type="button"` attribute on the torch help button appeared to correct the problem.
+  - Also set `inert` on a few elements Torch is using to simplify event handler code and avoid any further unexpected behavior.
+
 ### 3.0.1 - June 22, 2025 - Restored help button for actor having no light sources
 - [BUGFIX] The move of the HUD to App v2 required changes to the code that shows a [?] button instead of the torch button and provides guidance when the user has no light sources. This guidance is now restored. Thanks to Mika for the heads up and for patience with my slow response in addressing the problem.
 
