@@ -2,6 +2,12 @@
 
 ## Middle Kingdom - v10 -> main branch
 
+### 3.1.0 - July 26, 2025 - Additional light sources for zweihander and ac2d20 & units change to CoC7 from feet to yards/meters
+- [FEATURE] Light sources for zweihander and ac2d20 - thanks, lozonje! I'm finally delivering it.
+- [FEATURE] Light sources for CoC7 changed from assuming scene scaled in feet to assuming scene in yards/meters 
+  - thanks, lozonje!
+  - Yes, this is an IOU for a missing feature that auto-adjusts constant light units in definitions to scene light units.
+
 ### 3.0.2 - July 26, 2025 - Fix issue with stealing ENTER click
 - [BUGFIX] Torch help button when actor has no light sources was stealing the ENTER click when setting HP on DnD5e.
   - It might also affect some other systems but didn't affect all systems.
