@@ -1,16 +1,16 @@
-const QUERY_BUTTON_HTML = `<button class="control-icon torch" data-action="toggleTorchHelp"><i class="fas fa-question"></i></button>`;
-const DISABLED_ICON_HTML = `<i class="fas fa-slash fa-stack-1x"></i>`;
+const QUERY_BUTTON_HTML = `<button type="button" class="control-icon torch" data-action="toggleTorchHelp"><i class="fas fa-question" inert></i></button>`;
+const DISABLED_ICON_HTML = `<i class="fas fa-slash fa-stack-1x" inert></i>`;
 const TORCH_BUTTON_HTML = (tooltip, active, disabled) => {
   if (disabled) {
     return `
     <button type="button" class="control-icon torch fa-stack" data-action="toggleTorch" data-tooltip="${tooltip}">
-      <i class="fas fa-slash fa-stack-1x"></i>
-      <i class="fas fa-fire fa-stack-1x"></i>
+      <i class="fas fa-slash fa-stack-1x" inert></i>
+      <i class="fas fa-fire fa-stack-1x" inert></i>
     </button>`;
   } else {
     return `
     <button type="button" class="control-icon torch${active ? " active" : ""}" data-action="toggleTorch" data-tooltip="${tooltip}">
-      <i class="fas fa-fire"></i>
+      <i class="fas fa-fire" inert></i>
     </button>`;
   }
 };
@@ -20,7 +20,7 @@ const SOURCE_PALETTE_HTML = (items) => {
 const SOURCE_PALETTE_ITEM_HTML = (name, img, clazz) => {
   return `
   <a class="light-source-control ${clazz}" data-action="lightSource" data-light-source="${name}">
-    <span><img class="light-source-icon" src="${img}"/>${name}</span>
+    <span inert><img class="light-source-icon" src="${img}"/>${name}</span>
   </a>
   `;
 };
@@ -125,12 +125,7 @@ export default class TokenHUD {
     const sourceListener = async (event) => {
       event.preventDefault();
       event.stopPropagation();
-      const sourceName = // Click could hit the IMG or the enclosing SPAN
-        event.target.tagName === "IMG"
-          ? event.target.parentNode.parentNode.getAttribute("data-light-source")
-          : event.target.tagName === "SPAN"
-            ? event.target.parentNode.getAttribute("data-light-source")
-            : event.target.getAttribute("data-light-source");
+      const sourceName = event.target.getAttribute("data-light-source");
       await changeLightSource(token, sourceName);
       TokenHUD.syncDisabledState(tbutton, token);
       palette.classList.toggle("active", false);
